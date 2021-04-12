@@ -1,0 +1,89 @@
+<div class="container">
+  <div class="row">
+    <div *ngIf="statusSearch" class="col">
+      <div class="loader"></div>
+    </div>
+    <div *ngIf="!statusSearch" class="col-lg-12 col-md-12 col-sm-12">
+      <h2>Anagrafica Step</h2>
+      <!-- ---------------------------------------------------------------------- -->
+      <!-- Tep Anagrafica                                                         -->
+      <!-- ---------------------------------------------------------------------- -->
+      <div *ngIf="viewStep">
+        <form [formGroup]="fgStepAnagrafica">
+          <div class="form-step">
+            <div class="form-row">
+              <div class="form-group col-lg-6 col-sm-6 col-md-6">
+                <label for="ordineScuola" class="col-form-label">Ordine Scolastico</label>
+                {{ordineScuola}} - {{ordineScuolaDescrizione}}
+                <br>
+                <label for="annoScolastico" class="col-form-label">Anno Scolastico</label>
+                {{annoScolastico}}
+                <br>
+                <label for="codGraduatoria" class="col-form-label">Cod. Graduatoria</label>
+                {{codGraduatoria}}
+                <br>
+              </div>
+            </div>
+
+            <div *ngIf="!showTestata" class="form-row">
+
+              <table *ngIf="st.length" class="table table-bordered table-hover" >
+                <thead>
+                  <tr>
+                    <td>Step</td>
+                    <td>Data Elaborazione Step</td>
+                    <td colspan="2">Data invio domanda</td>
+                    <td>Data Allegati Entro il</td>
+                    
+                  </tr>
+                  <tr>
+                    <td> </td>
+                    <td> </td>
+                    <td>Da</td>
+                    <td>a</td>
+                    <td> </td>
+                    
+                  </tr>
+                  <tr>
+                </thead>
+                <tbody>
+                  
+                    <!--TODO utilizzare array step riempito per polare la tabella-->
+                    <tr *ngFor="let s of st; let i =index" (click)="select(s,i)" [class.active]="i == selectedRow" class="selecting-row" >
+                        <td>{{s.step}}</td>
+                        <td>{{s.dtStepGra}}</td>
+                        <td>{{s.dtDomInvDa}}</td>
+                        <td>{{s.dtDomInvA}}</td>
+                        <td>{{s.dtAllegati}}</td>
+                        <!-- <td><input name="gruppo1" type="radio" value="s" (change)="item($event)"></td> -->
+                        <!-- <td><input name="g1" type="radio" (click)="select(s)"></td> -->
+                    </tr>
+                    
+                  
+     
+                </tbody>
+              </table>
+              <!-- <div *ngIf="!st.length" style="color: crimson;">Non sono presenti step</div> -->
+            </div>
+
+          </div>
+          <div class="btn-group row">
+            <div class="form-group col-lg-6 col-sm-6 col-md-6">
+              <button type="button" class="btn btn-secondary" (click)="returnSearch()">Indietro</button>
+
+              <button *ngIf="st.length" type="button" class="btn btn-primary" (click)="modificaStep()">Modifica</button>
+
+              <button  *ngIf="codGraduatoriaPresente" type="button" class="btn btn-primary" (click)="inserisciStep()">Inserisci</button>
+
+              <button *ngIf="st.length" type="button" class="btn btn-primary" (click)="eliminaStep()">Elimina</button>
+            </div>
+          </div>
+          <br>
+          <div *ngIf="loadingError" class="alert alert-danger">
+            Attenzione: si è verificato un errore durante il caricamento dei dati iniziali.
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>

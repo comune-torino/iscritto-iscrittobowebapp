@@ -1,0 +1,14 @@
+<div class="container">
+  <div class="row">
+    <div *ngIf="statusSearch" class="col">
+      <div class="loader"></div>
+    </div>
+    <div [hidden]="statusSearch" class="col-lg-12 col-md-12 col-sm-12">
+      <h2>Modifica stato domanda</h2>
+      <app-graduatorie-ricerca-domanda (onClose)="onRicercaClose()" (onSelect)="onSelectDomanda($event)">
+      </app-graduatorie-ricerca-domanda>
+
+
+    </div>
+  </div>
+</div>

@@ -1,0 +1,45 @@
+<div class="-info-all-detail">
+  <div class="container">
+    <div *ngIf="globalError" class="alert alert-danger">
+      Attenzione: si è verificato un errore.
+    </div>
+    <div class="row">
+      <div *ngIf="statusSearch" class="col">
+        <div class="loader"></div>
+      </div>
+      <div class="col">
+        <div [ngSwitch]="codTipoCommissione">
+          <h2 *ngSwitchCase="'h'">Stampa verbale commissione H</h2>
+          <h2 *ngSwitchCase="'s'">Stampa verbale commissione S</h2>
+        </div>
+        <form [formGroup]="filtroRicercaForm" (submit)="onSubmit()">
+          <div class="form-step">
+            <div>
+              <div class="form-row">
+                <div class="form-group col-sm-4 col-md-4 col-lg-4">
+                  <label for="fromToDate" class="col-form-label">Da Data</label>
+                  <input type="date" formControlName="fromToDate" class="form-control" id="fromToDate" />
+                </div>
+                <div class="form-group offset-lg-4 offset-md-4 offset-sm-4 col-sm-4 col-md-4 col-lg-4">
+                  <label for="toDate" class="col-form-label">A data</label>
+                  <input type="date" formControlName="toDate" class="form-control" id="toDate" />
+                </div>
+              </div>
+            </div>
+          </div>
+          <p></p>
+          <div class="btn-group row">
+            <div class="col-sm-12 col-md-12 col-lg-6">
+              <button type="reset" class="btn btn-secondary" (click)="onReset()">Annulla</button>
+            </div>
+            <div class="col-sm-12 col-md-12 col-lg-6 btn-order-primary">
+              <button type="submit" class="btn btn-primary" [disabled]="disabledButtonSearch">
+                Cerca
+              </button>
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>

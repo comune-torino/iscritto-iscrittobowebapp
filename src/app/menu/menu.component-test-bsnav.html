@@ -1,0 +1,26 @@
+<!-- container-fluid impone di occupare tutta le viewport cioè la parte visibile della pagina -->
+<div *ngIf="mostraPag">
+<div class="container-fluid">
+  <h1>
+    Iscrizione Online
+  </h1>
+
+<div class="navbar navbar-expand-sm bsnav bsnav-transparent">
+    <button class="navbar-toggler toggler-spring"><span class="navbar-toggler-icon"></span></button>
+    <div class="collapse navbar-collapse justify-content-md-start">
+        <ul class="navbar-nav navbar-mobile mr-0">
+  <li class="nav-item nav-item-line" *ngFor="let funzione of funzioniPrimoLiv">
+      <a class="nav-link"  routerLink={{funzione.link}} routerLinkActive="active">{{funzione.descrizione}}</a>
+  </li>
+  </ul>
+</div>
+</div>
+
+<div class="bsnav-mobile">
+    <div class="bsnav-mobile-overlay"></div>
+    <div class="navbar"></div>
+  </div>
+<!-- app-user-info></app-user-info-->
+<router-outlet></router-outlet>
+</div>
+</div>

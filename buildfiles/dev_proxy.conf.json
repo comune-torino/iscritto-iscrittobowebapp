@@ -1,0 +1,6 @@
+{
+    "/iscrittoboweb/iscrittobosrvRest": {
+      "target": "http://mydevpc.csi.it:10110",
+      "secure": false
+    }
+}

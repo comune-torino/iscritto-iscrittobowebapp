@@ -1,0 +1,64 @@
+<!-- container-fluid impone di occupare tutta le viewport cioè la parte visibile della pagina -->
+
+<div class="content-page">
+  <div class="header" data-toggle="affix">
+    <div class="container">
+
+      <div *ngIf="!sceltaProfili">
+
+        <div class="row">
+          <div *ngIf="!hideMaterne" class="col-auto mr-auto">
+
+            <h1 *ngIf="!coin && !primoAccesso">Iscrizioni Online</h1>
+
+            <h1 *ngIf="coin && isNido">Iscrizioni Online Nidi d'infanzia</h1>
+            <h1 *ngIf="coin && isMaterna">Iscrizioni Online Scuole dell'infanzia</h1>
+          </div>
+          <div *ngIf="hideMaterne" class="col-auto mr-auto">
+            <h1>Iscrizioni Online Nidi</h1>
+          </div>
+        </div>
+
+        <div *ngIf="!hideMaterne && !primoAccesso" class="nav-box nav-box-ordine-scuola">
+          <div class="container">
+            <div class="navbar navbar-expand-md bsnav">
+              <div class="collapse navbar-collapse">
+                <ul class="row nav nav-pills navbar-mobile mb-3">
+                  <li class="nav-item nav-item-label-ordine-scuola">
+                    <a class="nav-link-label-ordine-scuola" href="javascript:void(0);">Ordine scuola:&nbsp;</a>
+                  </li>
+                  <li class="nav-item">
+                    <a class="nav-link nav-link-ordine-scuola" [ngClass]="{'active': coin && isNido}"
+                      routerLink="/domande/DOM" (click)="nidiOnClick()">Nidi d'infanzia</a>
+                  </li>
+                  <li class="nav-item">
+                    <a class="nav-link nav-link-ordine-scuola" [ngClass]="{'active': coin && isMaterna}"
+                      routerLink="/domande/DOM" (click)="materneOnClick()">Scuole dell'infanzia</a>
+                  </li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="nav-box" *ngIf="coin && !sceltaProfili">
+
+  <div class="container">
+    <div class="navbar navbar-expand-md bsnav">
+      <div class="collapse navbar-collapse">
+        <ul class="row nav nav-pills navbar-mobile mb-3">
+          <li class="nav-item" *ngFor="let funzione of macroFunzioni">
+            <a class="nav-link" *ngIf="funzione.codice!='UTE'" [ngClass]="{'active': actualMenu === funzione.codice}"
+              routerLink="{{funzione.link}}/{{funzione.codice}}">{{funzione.descrizione}}</a>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
+
+<router-outlet *ngIf="coin && !sceltaProfili"></router-outlet>

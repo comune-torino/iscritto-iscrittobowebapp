@@ -1,0 +1,289 @@
+<div class="container">
+  <div class="row">
+    <div *ngIf="statusSearch" class="col">
+      <div class="loader"></div>
+    </div>
+    <div *ngIf="!statusSearch" class="col-lg-12 col-md-12 col-sm-12">
+      <h2>Ricerca e gestione classi</h2>
+      <!-- ---------------------------------------------------------------------- -->
+      <!-- ricerca classi                                                         -->
+      <!-- ---------------------------------------------------------------------- -->
+      <div *ngIf="viewRicerca">
+        <form [formGroup]="fgRicercaClassi">
+          <div class="form-step">
+            <div class="form-row">
+              <div class="form-group col-lg-4 col-sm-4 col-md-4">
+                <label for="anno-scolastico" class="col-form-label">Anno scolastico *</label>
+                <select id="anno-scolastico" formControlName="anno-scolastico" class="custom-select form-control">
+                  <option [ngValue]="null">... Scegli un anno scolastico ...</option>
+                  <option *ngFor="let annoScolastico of annoScolasticoList" [ngValue]="annoScolastico.codice">
+                    {{annoScolastico.codice}}
+                  </option>
+                </select>
+              </div>
+              <div class="form-group col-lg-8 col-sm-8 col-md-8">
+                <label for="nido" class="col-form-label">Scuola *</label>
+                <select id="nido" formControlName="nido" class="custom-select form-control">
+                  <option [ngValue]="null" selected="selected">... Scegli una scuola ...</option>
+                  <option *ngFor="let nido of nidoList" [ngValue]="nido.codice">
+                    {{nido.descrizione | uppercase}}
+                  </option>
+                </select>
+              </div>
+            </div>
+          </div>
+          <div class="btn-group row">
+            <div class="col-sm-6 col-md-6 col-lg-6">
+              <button type="button" class="btn btn-secondary" (click)="returnSearch()">Chiudi</button>
+            </div>
+            <div class="col-sm-6 col-md-6 col-lg-6 ">
+              <button type="submit" class="btn btn-primary" (click)="onSubmitRicerca()" [disabled]="!fgRicercaClassi.valid">Cerca</button>
+            </div>
+          </div>
+          <br>
+          <div *ngIf="loadingError" class="alert alert-danger">
+            Attenzione: si è verificato un errore durante il caricamento dei dati iniziali.
+          </div>
+        </form>
+      </div>
+      <!-- ---------------------------------------------------------------------- -->
+      <!-- visualizzazione classi                                                 -->
+      <!-- ---------------------------------------------------------------------- -->
+      <div *ngIf="viewClassi">
+        <div *ngIf="bloccoModificaError" class="alert alert-danger">
+          Operazione non consentita durante la fase delle ammissioni.
+        </div>
+        <h4>{{criterioRicerca}}</h4>
+        <div id="box-ammissioni">
+          <b>Ammissioni per problemi sociali: {{descAmmissioni}}</b>
+          <br>
+          <div class="btn-ammissioni">
+            <button type="button" class="btn btn-primary" (click)="showAmmissioni()" [disabled]="!gestioneAmmissioni">Modifica</button>
+          </div>
+        </div>
+        <div class="table-responsive">
+          <table class="table">
+            <thead>
+              <tr>
+                <th>&nbsp;</th>
+                <th>Fascia età</th>
+                <th *ngIf="isNido">Tempo frequenza</th>
+                <th>Posti da assegnare</th>
+                <th>Posti ammessi</th>
+                <th>Posti accettati</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let classe of classi">
+                <td>
+                  <input type="radio" name="idClasseGroup" [value]="classe.idClasse" (change)="onSelectionChange(classe)">
+                </td>
+                <td>{{decFasceEta(classe.codFasciaEta)}}</td>
+                <td  *ngIf="isNido">{{decTipoFrequenza(classe.codTipoFrequenza)}}</td>
+                <td>{{nullToZero(classe.postiLiberi)}}</td>
+                <td>{{nullToZero(classe.postiAmmessi)}}</td>
+                <td>{{nullToZero(classe.postiAccettati)}}</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="btn-group row">
+          <div class="col-sm-2 col-md-2 col-lg-2">
+            <button type="button" class="btn btn-primary" (click)="showInsert()">Inserisci classe</button>
+          </div>
+          <div class="col-sm-3 col-md-3 col-lg-3">
+            <button type="button" class="btn btn-primary" (click)="showUpdate()" [disabled]="!classeSelezionata">Modifica classe</button>
+          </div>
+          <div *ngIf="hasPrivilegioEliminaClasse" class="col-sm-2 col-md-2 col-lg-2">
+            <button type="button" class="btn btn-primary" (click)="showDelete()" [disabled]="!classeSelezionata">Elimina classe</button>
+          </div>
+        </div>
+        <div class="btn-group row">
+          <div class="col-sm-6 col-md-6 col-lg-6">
+            <button type="button" class="btn btn-secondary" (click)="showRicerca()">Indietro</button>
+          </div>
+        </div>
+      </div>
+      <!-- ---------------------------------------------------------------------- -->
+      <!-- visualizzazione inserimento nuova classe                               -->
+      <!-- ---------------------------------------------------------------------- -->
+      <div *ngIf="viewInsert">
+        <div *ngIf="bloccoModificaError" class="alert alert-danger">
+          Operazione non consentita durante la fase delle ammissioni.
+        </div>
+        <h4>{{criterioRicerca}}</h4>
+        <form [formGroup]="fgInserimentoClassi">
+          <div class="form-step">
+            <div class="form-row">
+              <div class="form-group col-lg-4 col-sm-4 col-md-4">
+                <label for="fascia-eta" class="col-form-label">Fascia età *</label>
+                <select id="fascia-eta" formControlName="fascia-eta" class="custom-select form-control">
+                  <option [ngValue]="null">... Scegli una fascia ...</option>
+                  <option *ngFor="let fasciaEta of fasceEtaList" [ngValue]="fasciaEta.codice">
+                    {{fasciaEta.descrizione}}
+                  </option>
+                </select>
+              </div>
+              <div class="form-group col-lg-4 col-sm-4 col-md-4">
+                <label for="tipo-frequenza" class="col-form-label">Tempo frequenza *</label>
+                <select id="tipo-frequenza" formControlName="tipo-frequenza" class="custom-select form-control">
+                  <option [ngValue]="null">... Scegli una tipologia di frequenza ...</option>
+                  <option *ngFor="let tipoFrequenza of tipoFrequenzaList" [ngValue]="tipoFrequenza.codice">
+                    {{tipoFrequenza.descrizione}}
+                  </option>
+                </select>
+              </div>
+            </div>
+            <div class="form-row">
+              <div class="form-group col-lg-4 col-sm-4 col-md-4">
+                <label for="posti-liberi" class="col-form-label">Posti da assegnare *</label>
+                <input type="text" formControlName="posti-liberi" class="form-control" id="posti-liberi" placeholder="posti liberi" />
+              </div>
+            </div>
+          </div>
+          <div *ngIf="insertError" class="alert alert-danger">
+            Attenzione: si è verificato un errore durante l'inserimento della classe.
+          </div>
+          <div *ngIf="classePresenteError" class="alert alert-danger">
+            Attenzione: esiste già una classe con queste caratteristiche.
+          </div>
+        </form>
+        <div class="btn-group row">
+          <div class="col-sm-6 col-md-6 col-lg-6">
+            <button type="button" class="btn btn-secondary" (click)="showClassi()">Indietro</button>
+          </div>
+          <div class="col-sm-6 col-md-6 col-lg-6">
+            <button type="button" class="btn btn-primary" (click)="onSubmitInserisciClasse()" [disabled]="!fgInserimentoClassi.valid">Salva</button>
+          </div>
+        </div>
+      </div>
+      <!-- ---------------------------------------------------------------------- -->
+      <!-- visualizzazione modifica classe                                        -->
+      <!-- ---------------------------------------------------------------------- -->
+      <div *ngIf="viewUpdate">
+        <div *ngIf="bloccoModificaError" class="alert alert-danger">
+          Operazione non consentita durante la fase delle ammissioni.
+        </div>
+        <h4>{{criterioRicerca}}</h4>
+        <form [formGroup]="fgInserimentoClassi">
+          <div class="form-step">
+            <div class="form-row">
+              <div class="form-group col-lg-4 col-sm-4 col-md-4">
+                <label for="fascia-eta" class="col-form-label">Fascia età *</label>
+                <select id="fascia-eta" formControlName="fascia-eta" class="custom-select form-control">
+                  <option [ngValue]="null">... Scegli una fascia ...</option>
+                  <option *ngFor="let fasciaEta of fasceEtaList" [ngValue]="fasciaEta.codice">
+                    {{fasciaEta.descrizione}}
+                  </option>
+                </select>
+              </div>
+              <div class="form-group col-lg-4 col-sm-4 col-md-4">
+                <label for="tipo-frequenza" class="col-form-label">Tempo frequenza *</label>
+                <select id="tipo-frequenza" formControlName="tipo-frequenza" class="custom-select form-control">
+                  <option [ngValue]="null">... Scegli una tipologia di frequenza ...</option>
+                  <option *ngFor="let tipoFrequenza of tipoFrequenzaList" [ngValue]="tipoFrequenza.codice">
+                    {{tipoFrequenza.descrizione}}
+                  </option>
+                </select>
+              </div>
+            </div>
+            <div class="form-row">
+              <div class="form-group col-lg-4 col-sm-4 col-md-4">
+                <label for="posti-liberi" class="col-form-label">Posti da assegnare *</label>
+                <input type="text" formControlName="posti-liberi" class="form-control" id="posti-liberi" placeholder="posti liberi" />
+              </div>
+            </div>
+          </div>
+          <div *ngIf="updateError" class="alert alert-danger">
+            Attenzione: si è verificato un errore durante la modifica della classe.
+          </div>
+        </form>
+        <div class="btn-group row">
+          <div class="col-sm-6 col-md-6 col-lg-6">
+            <button type="button" class="btn btn-secondary" (click)="showClassi()">Indietro</button>
+          </div>
+          <div class="col-sm-6 col-md-6 col-lg-6">
+            <button type="button" class="btn btn-primary" (click)="onSubmitModificaClasse()" [disabled]="!fgInserimentoClassi.valid">Salva</button>
+          </div>
+        </div>
+      </div>
+      <!-- ---------------------------------------------------------------------- -->
+      <!-- visualizzazione modifica ammissioni                                    -->
+      <!-- ---------------------------------------------------------------------- -->
+      <div *ngIf="viewAmmissioni">
+        <div *ngIf="bloccoModificaError" class="alert alert-danger">
+          Operazione non consentita durante la fase delle ammissioni.
+        </div>
+        <h4>{{criterioRicerca}}</h4>
+        <form [formGroup]="fgAmmissioni">
+          <div class="form-step">
+            <div class="form-row">
+              <div class="form-group col-lg-4 col-sm-4 col-md-4">
+                <label for="ammissioni-problemi-sociali" class="col-form-label">Ammissioni per problemi sociali *</label>
+                <select id="ammissioni-problemi-sociali" formControlName="ammissioni-problemi-sociali" class="custom-select form-control">
+                  <option [ngValue]="null">... Scegli un valore ...</option>
+                  <option *ngFor="let ammissioni of ammissioniList" [ngValue]="ammissioni.codice">
+                    {{ammissioni.descrizione}}
+                  </option>
+                </select>
+              </div>
+            </div>
+          </div>
+          <div *ngIf="ammissioniError" class="alert alert-danger">
+            Attenzione: si è verificato un errore durante il salvataggio della modifica.
+          </div>
+        </form>
+        <div class="btn-group row">
+          <div class="col-sm-6 col-md-6 col-lg-6">
+            <button type="button" class="btn btn-secondary" (click)="showClassi()">Indietro</button>
+          </div>
+          <div class="col-sm-6 col-md-6 col-lg-6">
+            <button type="button" class="btn btn-primary" (click)="onSubmitModificaAmmissioni()" [disabled]="!fgAmmissioni.valid">Salva</button>
+          </div>
+        </div>
+      </div>
+      <!-- ---------------------------------------------------------------------- -->
+      <!-- visualizzazione cancellazione classe                                   -->
+      <!-- ---------------------------------------------------------------------- -->
+      <div *ngIf="viewDelete">
+        <div *ngIf="bloccoModificaError" class="alert alert-danger">
+          Operazione non consentita durante la fase delle ammissioni.
+        </div>
+        <h4>{{criterioRicerca}}</h4>
+        <div class="table-responsive">
+          <table class="table">
+            <thead>
+              <tr>
+                <th>Fascia età</th>
+                <th>Tempo frequenza</th>
+                <th>Posti da assegnare</th>
+                <th>Posti ammessi</th>
+                <th>Posti accettati</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>{{decFasceEta(classeSelezionata.codFasciaEta)}}</td>
+                <td>{{decTipoFrequenza(classeSelezionata.codTipoFrequenza)}}</td>
+                <td>{{nullToZero(classeSelezionata.postiLiberi)}}</td>
+                <td>{{nullToZero(classeSelezionata.postiAmmessi)}}</td>
+                <td>{{nullToZero(classeSelezionata.postiAccettati)}}</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <div *ngIf="deleteError" class="alert alert-danger">
+          {{deleteErrorMessage}}
+        </div>
+        <div class="btn-group row">
+          <div class="col-sm-6 col-md-6 col-lg-6">
+            <button type="button" class="btn btn-secondary" (click)="showClassi()">Indietro</button>
+          </div>
+          <div *ngIf="hasPrivilegioEliminaClasse" class="col-sm-6 col-md-6 col-lg-6">
+            <button type="button" class="btn btn-primary" (click)="onSubmitEliminaClasse()">Elimina</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

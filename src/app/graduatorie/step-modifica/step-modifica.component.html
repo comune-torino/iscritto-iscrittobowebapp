@@ -1,0 +1,82 @@
+<div class="container">
+  <div class="row">
+    <div *ngIf="statusSearch" class="col">
+      <div class="loader"></div>
+    </div>
+    <div *ngIf="!statusSearch" class="col-lg-12 col-md-12 col-sm-12">
+      <h2>Modifica Step</h2>
+      <!-- ---------------------------------------------------------------------- -->
+      <!-- Modifica Step                                                          -->
+      <!-- ---------------------------------------------------------------------- -->
+      <div *ngIf="viewModifica">
+        <form [formGroup]="fgModificaStep">
+          <div class="form-step">
+            <div class="form-row">
+              <div class="form-group col-lg-6 col-sm-6 col-md-6">
+                <label for="ordineScuola" class="col-form-label">Ordine Scolastico</label>
+                {{ordineScuola}} - {{ordineScuolaDescrizione}}
+                <br>
+                <label for="annoScolastico" class="col-form-label">Anno Scolastico</label>
+                {{annoScolastico}}
+                <br>
+                <label for="codGraduatoria" class="col-form-label">Cod. Graduatoria</label>
+                {{codGraduatoria}}
+                <br>
+              </div>
+            </div>
+
+            <div *ngIf="!showTestata" class="form-row">
+              <div class="form-group col-lg-6 col-sm-6 col-md-6">
+                <label for="Nstep" class="col-form-label">Step</label>
+                <input type="text" formControlName="Nstep" class="form-control" id="Nstep" maxlength="10" disabled/>
+              </div>
+              <div class="form-group col-lg-6 col-sm-6 col-md-6">
+                <label for="dataStep" class="col-form-label">Data elaborazione step</label>
+                <input type="date" formControlName="dataStep" class="form-control" id="dataStep" min="1970-01-01" [ngClass]="{'ng-invalid' :  fgModificaStep.errors?.erroreGraduatoria && (fgModificaStep.touched || fgModificaStep.dirty)}"
+                  max="2099-12-31"
+                 />
+              </div>
+            </div>
+
+            <div *ngIf="!showTestata" class="form-row">
+              <div class="form-group col-lg-6 col-sm-6 col-md-6">
+                <label for="dataDomandeDa" class="col-form-label">Data invio domande da</label>
+                <input type="date" formControlName="dataDomandeDa" class="form-control" id="dataDomandeDa" 
+                  min="1970-01-01" max="2099-12-31"
+                  [ngClass]="{'ng-invalid' : fgModificaStep.errors?.erroreInizioFine && (fgModificaStep.touched || fgModificaStep.dirty)}"/>
+              </div>
+              <div class="form-group col-lg-6 col-sm-6 col-md-6">
+                <label for="dataDomandeA" class="col-form-label">a</label>
+                <input type="date" formControlName="dataDomandeA" class="form-control" id="dataDomandeA"  
+                  min="1970-01-01" max="2099-12-31"
+                  [ngClass]="{'ng-invalid' : fgModificaStep.errors?.erroreInizioFine || fgModificaStep.errors?.erroreAllegati && (fgModificaStep.touched || fgModificaStep.dirty)}"/>
+              </div>
+            </div>
+
+            <div *ngIf="!showTestata" class="form-row">
+              <div class="form-group col-lg-6 col-sm-6 col-md-6">
+                <label for="dataAllegati" class="col-form-label">Data invio allegati</label>
+                <input type="date" formControlName="dataAllegati" class="form-control" id="dataAllegati" [ngClass]="{'ng-invalid' : fgModificaStep.errors?.erroreGraduatoria || fgModificaStep.errors?.erroreAllegati && (fgModificaStep.touched || fgModificaStep.dirty)}"
+                  min="1970-01-01" max="2099-12-31"
+                   />
+              </div>
+            </div>
+          </div>
+
+          <div class="btn-group row">
+            <div class="col-sm-6 col-md-6 col-lg-6">
+              <button type="button" class="btn btn-secondary" (click)="returnSearch()">Indietro</button>
+            </div>
+            <div class="col-sm-6 col-md-6 col-lg-6 ">
+              <button type="button" class="btn btn-primary" (click)="modificaStep()">Salva</button>
+            </div>
+          </div>
+          <br>
+          <div *ngIf="loadingError" class="alert alert-danger">
+            Attenzione: si è verificato un errore durante il caricamento dei dati iniziali.
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>

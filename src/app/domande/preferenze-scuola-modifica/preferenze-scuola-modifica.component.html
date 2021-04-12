@@ -1,0 +1,107 @@
+<div class="user-info-all-detail">
+  <div class="container">
+    <div *ngIf="globalError" class="alert alert-danger">
+      Attenzione: si è verificato un errore.
+    </div>
+    <div *ngIf="statusSearchDomanda" class="row">
+      <div class="col">
+        <div class="loader"></div>
+      </div>
+    </div>
+    <div [hidden]="statusSearchDomanda" class="user-info-all-detail">
+      <div *ngIf="domandaNido" class="container">
+        <div class="row">
+          <div class="col-md-12 col-lg-12">
+            <b>Graduatoria:</b> {{codAnagraficaGraduatoria}}
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-md-12 col-lg-12">
+            <b> N° Domanda:</b> {{nDomandaIscrizione}}
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-md-3 col-lg-3">
+            <b> Codice fiscale minore:</b> {{anagraficaMinore.codiceFiscale}}
+          </div>
+          <div class="col-md-3 col-lg-3">
+            <b> Cognome minore:</b> {{anagraficaMinore.cognome}}
+          </div>
+          <div class="col-md-3 col-lg-3">
+            <b>  Nome minore:</b> {{anagraficaMinore.nome}}
+          </div>
+          <div class="col-md-3 col-lg-3">
+            <b> Data nascita:</b> {{anagraficaMinore.dataNascita}}
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-md-3 col-lg-3">
+            <b>  Codice fiscale richiedente:</b> {{richiedente.anagrafica.codiceFiscale}}
+          </div>
+          <div class="col-md-3 col-lg-3">
+            <b>  Cognome richiedente:</b> {{richiedente.anagrafica.cognome}}
+          </div>
+          <div class="col-md-3 col-lg-3">
+            <b>   Nome richiedente: </b>{{richiedente.anagrafica.nome}}
+          </div>
+          <div class="col-md-3 col-lg-3">
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-md-12 col-lg-12">
+            <b>  Stato domanda: </b>{{statoDomanda}}
+          </div>
+        </div>
+
+            
+            
+       
+          
+          <div *ngIf="!showTestata" class="form-row">
+          <table  class="table table-bordered table-hover" >
+            <thead>
+              <tr class="text-center font-weight-bold">
+                <td>Ordine preferenza</td>
+                <td>Codice scuola</td>
+                <td>Descrizione</td>
+                <td>Indirizzo</td>
+                <td>Tempo di frequenza</td>
+                <td>Stato preferenza attuale</td>
+                <td>Stato preferenza ripristinato</td>
+              </tr>
+            </thead>
+            <tbody>
+               
+                <tr>
+                    <td>{{ordinePreferenza}}</td>
+                    <td>{{codScuola}} </td>
+                    <td>{{descScuola}}</td>
+                    <td>{{indirizzo}}</td>
+                    <td>{{descTipoFre}}</td>
+                    <td>{{descStatoScu}}</td>
+                    <td>{{descStatoFuturo}}</td>
+                </tr> 
+            </tbody>
+          </table>
+        </div> 
+
+
+
+              <!-- Elenco Condizione di punteggio End -->
+              <div *ngIf="!istruttoria" class="btn-group row">
+                <div class="col-sm-12 col-md-12 col-lg-6">
+                  <a class="btn btn-secondary" (click)="confermaOnClick()" role="button">Conferma</a>
+                </div>
+                <div class="col-sm-12 col-md-12 col-lg-6">
+                  <a class="btn btn-secondary" (click)="annullaOnClick()" role="button">Annulla</a>
+                </div>
+              </div>
+            
+            
+         
+        <!--//row-->
+      </div>
+      <!-- container-->
+    </div>
+  </div>
+</div>

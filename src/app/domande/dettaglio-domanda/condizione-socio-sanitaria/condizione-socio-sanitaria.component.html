@@ -1,0 +1,259 @@
+<h4 *ngIf="isMinore">Disabilit&agrave; : {{hasDisabilitaText}}</h4>
+<div *ngIf="isMinore && hasDisabilita" class="rowdocument firstelement">
+  <div *ngIf="docDisabilita?.length > 0">
+    <p>Documenti già presenti:</p>
+    <table class="table">
+      <thead>
+        <tr>
+          <th>Protocollo</th>
+          <th>Nome File</th>
+          <th>Data Inserimento</th>
+          <th *ngIf="hasPrivilegioUpload">Ricevuta</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let documento of docDisabilita">
+          <td>{{documento.protocollo}}</td>
+          <td *ngIf="!canDownloadAllegato">{{documento.file.name}}</td>
+          <td *ngIf="canDownloadAllegato">
+            <a href="javascript:void(0);" (click)="downloadAllegato(documento.id, documento.file.name)">
+              {{documento.file.name}}
+            </a>
+          </td>
+          <td>{{documento.dataInserimento}}</td>
+          <td *ngIf="hasPrivilegioUpload">
+            <button (click)="stampaAllegato(documento.id)" class="btn btn-info fw-600 customButtonSfs m-r-1">
+              <span class="fa fa-file"> </span> Stampa
+            </button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  <div *ngIf="hasPrivilegioUpload">
+    <div *ngIf="errorStatusDisabilita" role="alert" class="alert alert-danger fade show">
+      <p>{{errorStatusMessageDisabilita}}</p>
+    </div>
+    <div *ngIf="successStatusDisabilita" class="alert alert-success fade show" role="alert">
+      <p>File caricato/i correttamente.</p>
+    </div>
+    <div class="form-group">
+      <label role="button" class="btn btn-outline-success item">
+        <i aria-hidden="true" class="fa fa-plus-circle"></i> Aggiungi documento
+        <input type="file" (change)="handleFileDisabilita($event.target)" name="minoreDisabilita-uploadDocumento" aria-required="false" aria-invalid="false" style="display: none;">
+      </label><br />
+      <small class="ml-2">Massimo <strong>5</strong> documenti (formato PDF o immagine) con dimensione massima di
+        <strong>2Mb</strong>
+      </small>
+    </div>
+    <div class="form-group elenco_documenti">
+      <div *ngFor="let file of filesDisabilita" class="input-group doc allegato">
+        <input *ngIf="!file.isUpload" type="text" class="form-control" id="doc2" placeholder="{{ file.fileName }}" />
+        <div *ngIf="!file.isUpload" class="input-group-append">
+          <button (click)="removeFileDisabilita(file)" type="button" class="btn btn-cancel" title="Elimina il documento">
+            <i aria-hidden="true" class="fa fa-trash"></i> <span class="sr-only">Elimina il documento</span>
+          </button>
+        </div>
+      </div>
+    </div>
+    <button (click)="uploadDisabilita()" type="button" class="btn btn-secondary">
+      <span>Salva i documenti</span>
+    </button>
+  </div>
+</div>
+<h4 *ngIf="isMinore">Servizi sociali: {{hasServiziSocialiText}}</h4>
+<div *ngIf="isMinore && hasServiziSociali" class="rowdocument">
+  <ul>
+    <li><strong>Servizio: </strong>{{datiServiziSociali.nome}}</li>
+    <li><strong>Nominativo Assistente: </strong>{{datiServiziSociali.assistente}}</li>
+    <li><strong>Indirizzo: </strong>{{datiServiziSociali.indirizzo}}</li>
+    <li><strong>Telefono: </strong>{{datiServiziSociali.telefono}}</li>
+  </ul>
+  <div *ngIf="docServiziSociali?.length > 0">
+    <p>Documenti già presenti:</p>
+    <table class="table">
+      <thead>
+        <tr>
+          <th>Protocollo</th>
+          <th>Nome File</th>
+          <th>Data Inserimento</th>
+          <th *ngIf="hasPrivilegioUpload">Ricevuta</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let documento of docServiziSociali">
+          <td>{{documento.protocollo}}</td>
+          <td *ngIf="!canDownloadAllegato">{{documento.file.name}}</td>
+          <td *ngIf="canDownloadAllegato">
+            <a href="javascript:void(0);" (click)="downloadAllegato(documento.id, documento.file.name)">
+              {{documento.file.name}}
+            </a>
+          </td>
+          <td>{{documento.dataInserimento}}</td>
+          <td *ngIf="hasPrivilegioUpload">
+            <button (click)="stampaAllegato(documento.id)" class="btn btn-info fw-600 customButtonSfs m-r-1">
+              <span class="fa fa-file"> </span> Stampa
+            </button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  <div *ngIf="hasPrivilegioUpload">
+    <div *ngIf="errorStatusServiziSociali" role="alert" class="alert alert-danger fade show">
+      <p>{{errorStatusMessageServiziSociali}}</p>
+    </div>
+    <div *ngIf="successStatusServiziSociali" class="alert alert-success fade show" role="alert">
+      <p>File caricato/i correttamente.</p>
+    </div>
+    <div class="form-group">
+      <label role="button" class="btn btn-outline-success item">
+        <i aria-hidden="true" class="fa fa-plus-circle"></i> Aggiungi documento
+        <input type="file" (change)="handleFileServiziSociali($event.target)" name="minoreServiziSociali-uploadDocumento" aria-required="false" aria-invalid="false" style="display: none;">
+      </label><br />
+      <small class="ml-2">Massimo <strong>5</strong> documenti (formato PDF o immagine) con dimensione massima di
+        <strong>2Mb</strong>
+      </small>
+    </div>
+    <div class="form-group elenco_documenti">
+      <div *ngFor="let file of filesServiziSociali" class="input-group doc allegato">
+        <input *ngIf="!file.isUpload" type="text" class="form-control" placeholder="{{ file.fileName }}" />
+        <div *ngIf="!file.isUpload" class="input-group-append">
+          <button (click)="removeFileServiziSociali(file)" type="button" class="btn btn-cancel" title="Elimina il documento">
+            <i aria-hidden="true" class="fa fa-trash"></i> <span class="sr-only">Elimina il documento</span>
+          </button>
+        </div>
+      </div>
+    </div>
+    <button (click)="uploadServiziSociali()" type="button" class="btn btn-secondary">
+      <span>Salva i documenti</span>
+    </button>
+  </div>
+</div>
+<h4>Gravi problemi di salute: {{hasProblemiSaluteText}}</h4>
+<div *ngIf="hasProblemiSalute" class="rowdocument">
+  <div *ngIf="docProblemiSalute?.length > 0">
+    <p>Documenti già presenti:</p>
+    <table class="table">
+      <thead>
+        <tr>
+          <th>Protocollo</th>
+          <th>Nome File</th>
+          <th>Data Inserimento</th>
+          <th *ngIf="hasPrivilegioUpload">Ricevuta</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let documento of docProblemiSalute">
+          <td>{{documento.protocollo}}</td>
+          <td *ngIf="!canDownloadAllegato">{{documento.file.name}}</td>
+          <td *ngIf="canDownloadAllegato">
+            <a href="javascript:void(0);" (click)="downloadAllegato(documento.id, documento.file.name)">
+              {{documento.file.name}}
+            </a>
+          </td>
+          <td>{{documento.dataInserimento}}</td>
+          <td *ngIf="hasPrivilegioUpload">
+            <button (click)="stampaAllegato(documento.id)" class="btn btn-info fw-600 customButtonSfs m-r-1">
+              <span class="fa fa-file"> </span> Stampa
+            </button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  <div *ngIf="hasPrivilegioUpload">
+    <div *ngIf="errorStatusProblemiSalute" role="alert" class="alert alert-danger fade show">
+      <p>{{errorStatusMessageProblemiSalute}}</p>
+    </div>
+    <div *ngIf="successStatusProblemiSalute" class="alert alert-success fade show" role="alert">
+      <p>File caricato/i correttamente.</p>
+    </div>
+    <div class="form-group">
+      <label role="button" class="btn btn-outline-success item">
+        <i aria-hidden="true" class="fa fa-plus-circle"></i> Aggiungi documento
+        <input type="file" (change)="handleFileProblemiSalute($event.target)" name="minoreDisabilita-uploadDocumento" aria-required="false" aria-invalid="false" style="display: none;">
+      </label><br />
+      <small class="ml-2">Massimo <strong>5</strong> documenti (formato PDF o immagine) con dimensione massima di
+        <strong>2Mb</strong>
+      </small>
+    </div>
+    <div class="form-group elenco_documenti">
+      <div *ngFor="let file of filesProblemiSalute" class="input-group doc allegato">
+        <input *ngIf="!file.isUpload" type="text" class="form-control" placeholder="{{ file.fileName }}" />
+        <div *ngIf="!file.isUpload" class="input-group-append">
+          <button (click)="removeFileProblemiSalute(file)" type="button" class="btn btn-cancel" title="Elimina il documento">
+            <i aria-hidden="true" class="fa fa-trash"></i> <span class="sr-only">Elimina il documento</span>
+          </button>
+        </div>
+      </div>
+    </div>
+    <button (click)="uploadProblemiSalute()" type="button" class="btn btn-secondary">
+      <span>Salva i documenti</span>
+    </button>
+  </div>
+</div>
+<h4 *ngIf="isSoggetto && (anagraficaSoggetto.sesso === 'F')">Gravidanza: {{hasGravidanzaText}}</h4>
+<div *ngIf="isSoggetto && (anagraficaSoggetto.sesso === 'F') && hasGravidanza" class="rowdocument">
+  <div *ngIf="docGravidanza?.length > 0">
+    <p>Documenti già presenti:</p>
+    <table class="table">
+      <thead>
+        <tr>
+          <th>Protocollo</th>
+          <th>Nome File</th>
+          <th>Data Inserimento</th>
+          <th *ngIf="hasPrivilegioUpload">Ricevuta</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let documento of docGravidanza">
+          <td>{{documento.protocollo}}</td>
+          <td *ngIf="!canDownloadAllegato">{{documento.file.name}}</td>
+          <td *ngIf="canDownloadAllegato">
+            <a href="javascript:void(0);" (click)="downloadAllegato(documento.id, documento.file.name)">
+              {{documento.file.name}}
+            </a>
+          </td>
+          <td>{{documento.dataInserimento}}</td>
+          <td *ngIf="hasPrivilegioUpload">
+            <button (click)="stampaAllegato(documento.id)" class="btn btn-info fw-600 customButtonSfs m-r-1">
+              <span class="fa fa-file"> </span> Stampa
+            </button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  <div *ngIf="hasPrivilegioUpload">
+    <div *ngIf="errorStatusGravidanza" role="alert" class="alert alert-danger fade show">
+      <p>{{errorStatusMessageGravidanza}}</p>
+    </div>
+    <div *ngIf="successStatusGravidanza" class="alert alert-success fade show" role="alert">
+      <p>File caricato/i correttamente.</p>
+    </div>
+    <div class="form-group">
+      <label role="button" class="btn btn-outline-success item">
+        <i aria-hidden="true" class="fa fa-plus-circle"></i> Aggiungi documento
+        <input (change)="handleFileGravidanza($event.target)" type="file" name="minoreDisabilita-uploadDocumento" aria-required="false" aria-invalid="false" style="display: none;">
+      </label><br />
+      <small class="ml-2">Massimo <strong>5</strong> documenti (formato PDF o immagine formato JPG o JPEG) con
+        dimensione
+        massima di <strong>2Mb</strong>
+      </small>
+    </div>
+    <div class="form-group elenco_documenti">
+      <div *ngFor="let file of filesGravidanza" class="input-group doc allegato">
+        <input *ngIf="!file.isUpload" type="text" class="form-control" placeholder="{{ file.fileName }}" />
+        <div *ngIf="!file.isUpload" class="input-group-append">
+          <button (click)="removeFileGravidanza(file)" type="button" class="btn btn-cancel" title="Elimina il documento">
+            <i aria-hidden="true" class="fa fa-trash"></i> <span class="sr-only">Elimina il documento</span>
+          </button>
+        </div>
+      </div>
+    </div>
+    <button (click)="uploadGravidanza()" type="button" class="btn btn-secondary">
+      <span>Salva i documenti</span>
+    </button>
+  </div>
+</div>

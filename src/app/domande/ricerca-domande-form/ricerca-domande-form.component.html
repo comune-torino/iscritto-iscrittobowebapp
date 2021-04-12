@@ -1,0 +1,109 @@
+<div class="-info-all-detail">
+  <div class="container">
+    <div class="row">
+      <div *ngIf="statusSearch" class="col">
+        <div class="loader"></div>
+      </div>
+      <div *ngIf="!statusSearch" class="col">
+        <h2 *ngIf="isFromMps">Modifica stato scuola di preferenza</h2>
+        <h2 *ngIf="!isFromMps">Ricerca domande d'iscrizione</h2>
+        <div>
+          <strong *ngIf="!showTestata">Scegli e compila un criterio di ricerca</strong>
+        </div>
+        <app-gruppo-criteri [raggruppamentoSelezionato]="raggruppamentoSelezionato" (emitRaggruppamento)="onRaggruppamento($event)"
+                            *ngIf="showRaggruppamenti"></app-gruppo-criteri>
+        <form [formGroup]="FiltroRicercaForm" (submit)="onSubmit()">
+          <div class="form-step" *ngIf="showCriterio">
+            <div>
+              <div class="form-row" *ngIf="raggruppamentoSelezionato == 'CF'">
+                <div class="form-group col-md-12">
+                  <div class="form-group col-sm-12 col-md-6">
+                    <label for="codiceFiscale" class="col-form-label">Codice fiscale *</label>
+                    <input type="text" formControlName="codiceFiscaleMinore" class="form-control" id="codiceFiscale"
+                           placeholder="inserisci il codice fiscale"/>
+                    <!-- div *ngIf="codiceFiscale.errors.required" class="invalid-feedback">
+                      Codice fiscale obbligatorio
+                    </div>
+                    <div *ngIf="codiceFiscale.errors.minlength" class="invalid-feedback">
+                      codice fiscale: 16 caratteri
+                    </div>
+                    <div *ngIf="codiceFiscale.errors.maxlength" class="invalid-feedback">
+                      codice fiscale: 16 caratteri
+                    </div-->
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="form-row" *ngIf="raggruppamentoSelezionato == 'CC'">
+              <div class="form-group col-sm-12 col-md-6">
+                <label for="cognome" class="col-form-label">Cognome</label>
+                <input type="text" formControlName="cognomeMinore" class="form-control" id="cognome"
+                       placeholder="Inserisci il cognome"/>
+              </div>
+              <div class="form-group col-sm-12 col-md-6">
+                <label for="nome" class="col-form-label">Nome</label>
+                <input type="text" formControlName="nomeMinore" class="form-control" id="nome"
+                       placeholder="Inserisci il nome"/>
+              </div>
+            </div>
+            <div class="form-row" *ngIf="raggruppamentoSelezionato == 'PD'">
+              <div class="form-group col-md-12">
+                <div class="form-group col-sm-12 col-md-6">
+                  <label for="protocolloDomanda" class="col-form-label">Numero Domanda *</label>
+                  <div *ngIf="isNido"> <input type="text" formControlName="protocolloDomanda" class="form-control" id="protocolloDomanda" placeholder="inserisci il numero domanda (NID-nnnnn-aaaa)"/></div>
+                  <div *ngIf="isMaterna"> <input type="text" formControlName="protocolloDomanda" class="form-control" id="protocolloDomanda" placeholder="inserisci il numero domanda (MAT-nnnnn-aaaa)"/></div>
+                </div>
+              </div>
+            </div>
+            <div class="form-row" *ngIf="raggruppamentoSelezionato == 'SS'">
+              <div class="form-group col-sm-12 col-md-5">
+                <label for="Scuola" class="col-form-label">Scuola *</label>
+                <select id="Scuola" [ngModel]="defaultSelectScuola" formControlName="codiceScuola"
+                        class="custom-select form-control">
+                  <option [ngValue]="null" selected="selected">... Scegli la Scuola ...</option>
+                  <option [ngValue]="0">[TUTTE]</option>
+                  <option *ngFor="let scuola of scuole" [ngValue]="scuola.codice">{{scuola.descrizione | uppercase}}
+                  </option>
+                </select>
+              </div>
+              <div class="form-group col-sm-12 col-md-6">
+                <label for="stato" class="col-form-label">Stato della domanda</label>
+                <select id="stato" [ngModel]="defaultSelectStato" formControlName="codiceStatoDomanda"
+                        class="custom-select form-control">
+                  <option [ngValue]="0" selected="selected">[TUTTI]</option>
+                  <option *ngFor="let stato of statiDomanda" [ngValue]="stato.codice">{{stato.descrizione | uppercase}}
+                  </option>
+                </select>
+              </div>
+            </div>
+            <!-- valido = {{FiltroRicercaForm.valid}}-->
+          </div>
+          <div *ngIf="errorOnRicerca" class="alert alert-danger">
+            Attenzione: si è verificato un errore nella ricerca, ripetere l'operazione.
+          </div>
+          <div *ngIf="errorLoadNidi" class="alert alert-danger">
+            Attenzione: si è verificato un errore nel reperimento dei nidi.
+          </div>
+          <div *ngIf="errorLoadStati" class="alert alert-danger">
+            Attenzione: si è verificato un errore nel reperimento stati.
+          </div>
+          <div *ngIf="showTestata">
+            <strong>{{criterioCompilato}}</strong>
+          </div>
+          <app-testata-domande *ngIf="showTestata" [testataDomande]="testataDomande" [isFromMps]="isFromMps"></app-testata-domande>
+          <p></p>
+          <div class="btn-group row">
+          <div class="col-sm-12 col-md-12 col-lg-6">
+            <button type="reset" class="btn btn-secondary" (click)="onReset()">Annulla</button>
+          </div>
+          <div class="col-sm-12 col-md-12 col-lg-6 btn-order-primary">
+            <button *ngIf="!showTestata" type="submit" class="btn btn-primary" [disabled]="disabledButtonSearch">
+              Cerca
+            </button>
+          </div>
+        </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>

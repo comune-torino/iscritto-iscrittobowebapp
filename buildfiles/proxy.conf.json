@@ -1,0 +1,6 @@
+{
+    "/iscrittoboweb/iscrittobosrvRest": {
+      "target": "http://dev-jbiscritto01.csi.it:35710",
+      "secure": false
+    }
+}

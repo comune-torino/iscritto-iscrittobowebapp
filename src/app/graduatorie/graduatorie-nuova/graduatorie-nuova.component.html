@@ -1,0 +1,95 @@
+<div class="-info-all-detail">
+  <div class="container">
+    <div *ngIf="globalError" class="alert alert-danger">
+      Attenzione: si è verificato un errore.
+    </div>
+    <div class="row">
+      <div *ngIf="statusSearch" class="col">
+        <div class="loader"></div>
+      </div>
+      <div *ngIf="!statusSearch" class="col">
+        <h2>Calcolo graduatoria</h2>
+        <form [formGroup]="calcolaGraduatoriaForm">
+          <div class="form-step">
+            <div>
+              <div class="form-row">
+                <div class="form-group col-sm-4 col-md-4 col-lg-4">
+                  <label for="graduatoria" class="col-form-label">Graduatoria</label>
+                  <input type="text" formControlName="graduatoria" class="form-control" id="graduatoria" readonly=true value={{decodificaGraduatoria}} />
+                </div>
+                <div class="form-group offset-lg-1 offset-md-4 offset-sm-4 col-sm-4 col-md-4 col-lg-4">
+                  <label for="step" class="col-form-label">Step</label>
+                  <input type="text" formControlName="step" class="form-control" id="step" readonly=true value={{ultimaGraduatoria.step}} />
+                </div>
+                <div class="form-group col-sm-4 col-md-4 col-lg-4">
+                  <label for="statoAttuale" class="col-form-label">Stato attuale</label>
+                  <input type="text" formControlName="statoAttuale" class="form-control" id="statoAttuale" readonly=true value="{{decodificaStatoGraduatoria}}" />
+                </div>
+                <div class="form-group offset-lg-1 offset-md-4 offset-sm-4 col-sm-4 col-md-4 col-lg-4">
+                  <label for="dataUltimoCalcolo" class="col-form-label">Ultimo calcolo</label>
+                  <input type="text" formControlName="dataUltimoCalcolo" class="form-control" id="dataUltimoCalcolo" readonly=true value={{ultimaGraduatoria.dataUltimoCalcolo}} />
+                </div>
+                <div *ngIf="flag_sceltaStatoDaCalcolare" class="form-group col-sm-4 col-md-4 col-lg-4">
+                  <label for="statoDaCalcolare" class="col-form-label">Stato/Step da calcolare</label>
+                  <select id="statoDaCalcolare" [ngModel]="codiceStatoDaCalcolare" formControlName="statoDaCalcolare" class="custom-select form-control">
+                    <option [ngValue]="null" selected="selected">... scegli lo stato ...</option>
+                    <option *ngFor="let statoGraduatoria of statiGraduatoria" [ngValue]="statoGraduatoria.codice">
+                      {{statoGraduatoria.descrizione | uppercase}}
+                    </option>
+                  </select>
+                </div>
+              </div>
+            </div>
+          </div>
+          <p></p>
+          <div *ngIf="errorOnRicerca">
+            <p></p>
+            <div class="alert alert-danger" role="alert">
+              <p>{{guiErrorMessage}}</p>
+            </div>
+          </div>
+          <div *ngIf="disabledButtonCalcola">
+            <p></p>
+            <div class="alert alert-info fade show" role="alert">
+              <p>Calcolo della graduatoria completato, il risultato è disponibile per la consultazione tramite funzione Visualizza Graduatoria.</p>
+            </div>
+          </div>
+          <div *ngIf="errorOnCheckAvvioCalcoloGraduatoria">
+            <p></p>
+            <div class="alert alert-danger" role="alert">
+              <p>Calcolo della graduatoria non avviato, sono presenti <b>{{domandeNonIstruite}}</b> domande non ancora istruite</p>
+              <div *ngIf="infoVerifiche.length > 0">
+                <br>
+                <p>Alcune verifiche preventive non sono ancora state validate:</p>
+                <ul>
+                  <li *ngFor="let infoVerifica of infoVerifiche">
+                    {{infoVerifica.descrizioneCondizione}}: <b>{{infoVerifica.occorrenze}}</b>
+                  </li>
+                </ul>
+              </div>
+            </div>
+          </div>
+          <div *ngIf="errorSelezioneStatoDaCalcolare" class="alert alert-danger" role="alert">
+            <p>Selezionare lo Stato/Step da calcolare</p>
+          </div>
+          <div *ngIf="errorAltroCalcoloInCorso" class="alert alert-danger" role="alert">
+            <p>Il calcolo della graduatoria è già in corso, riprovare più tardi</p>
+          </div>
+          <div *ngIf="errorAmmissioni" class="alert alert-danger" role="alert">
+            <p>Impossibile eseguire l'ammissione in questa fase</p>
+          </div>
+          <div class="btn-group row">
+            <div class="col-sm-12 col-md-12 col-lg-6">
+              <button type="reset" class="btn btn-secondary" (click)="onClose()">Chiudi</button>
+            </div>
+            <div class="col-sm-12 col-md-12 col-lg-6">
+              <button type="button" class="btn btn-primary" (click)="calcolaGraduatoria()" [disabled]="disabledButtonCalcola">
+                Calcola
+              </button>
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>

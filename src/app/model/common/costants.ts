@@ -1,0 +1,2 @@
+
+const APPLICATION_NAME: string = 'ISCRITTOBO';

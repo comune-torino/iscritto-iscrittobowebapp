@@ -1,0 +1,21 @@
+.col-cognome-minore {
+    white-space: normal;
+    min-width: 200px;
+}
+
+.col-preferenza {
+    white-space: normal;
+    min-width: 150px;
+}
+
+.col-altre-preferenze {
+    white-space: nowrap;
+}
+
+.col-data-nascita {
+    white-space: normal;
+}
+
+.col-isee {
+    text-align: right;
+}

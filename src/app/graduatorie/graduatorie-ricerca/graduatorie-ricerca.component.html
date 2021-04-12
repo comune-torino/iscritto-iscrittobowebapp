@@ -1,0 +1,166 @@
+<div class="-info-all-detail">
+  <div class="container">
+    <div *ngIf="globalError" class="alert alert-danger">
+      Attenzione: si è verificato un errore.
+    </div>
+    <div class="row">
+      <div *ngIf="statusSearch" class="col">
+        <div class="loader"></div>
+      </div>
+      <div *ngIf="!statusSearch" class="col">
+        <h2 *ngIf="isDse">Visualizzazione graduatoria DSE</h2>
+        <h2 *ngIf="!isDse">Visualizzazione graduatoria</h2>
+        <form [formGroup]="visualizzaGraduatoriaForm">
+          <div *ngIf="!showResult && graduatorieDisponibili" class="form-step">
+            <div class="form-row">
+              <div class="form-group col-sm-4 col-md-4 col-lg-4">
+                <label for="graduatoria" class="col-form-label">Graduatoria</label>
+                <select id="graduatoria" [(ngModel)]="graduatoriaSelezionata" formControlName="graduatoria" class="custom-select form-control" (ngModelChange)="onSelectGraduatoria()">
+                  <option *ngFor="let graduatoria of elencoGraduatorie" [ngValue]="graduatoria">
+                    {{graduatoria.descrizione | uppercase}}
+                  </option>
+                </select>
+              </div>
+              <div class="form-group offset-lg-1 offset-md-4 offset-sm-4 col-sm-1 col-md-1 col-lg-1">
+                <label for="step" class="col-form-label">Step</label>
+                <select id="step" [(ngModel)]="stepSelezionato" formControlName="step" class="custom-select form-control">
+                  <option *ngFor="let step of elencoStepGraduatoria" [ngValue]="step">
+                    {{step.descrizione | uppercase}}
+                  </option>
+                </select>
+              </div>
+              <div class="form-group offset-lg-1 offset-md-1 offset-sm-1 col-sm-2 col-md-2 col-lg-2">
+                <label for="statoGraduatoria" class="col-form-label">Stato graduatoria</label>
+                <input type="text" class="form-control" readonly=true value={{decodificaStatoUltimaGraduatoria}} />
+              </div>
+              <div class="form-group col-sm-4 col-md-4 col-lg-4">
+                <label for="scuola" class="col-form-label">Scuola *</label>
+                <select id="scuola" [(ngModel)]="scuolaSelezionata" formControlName="scuola" class="custom-select form-control">
+                  <option [ngValue]="0">... scegli la scuola ...</option>
+                  <option *ngFor="let scuola of elencoScuoleAbilitate" [ngValue]="scuola.codice">
+                    {{scuola.descrizione | uppercase}}
+                  </option>
+                </select>
+              </div>
+              <div class="form-group offset-lg-1 offset-md-4 offset-sm-4 col-sm-4 col-md-4 col-lg-4">
+                <label for="fasciaEta" class="col-form-label">Fascia età *</label>
+                <select id="fasciaEta" [(ngModel)]="fasciaSelezionata" formControlName="fasciaEta" class="custom-select form-control">
+                  <option [ngValue]="0">... scegli la fascia di età ...</option>
+                  <option *ngFor="let fasciaEta of elencoFasceEta" [ngValue]="fasciaEta.codice">
+                    {{fasciaEta.descrizione | uppercase}}
+                  </option>
+                </select>
+              </div>
+              <div class="form-group col-sm-4 col-md-4 col-lg-4">
+                <label for="frequenza" class="col-form-label">Frequenza *</label>
+                <select id="frequenza" [(ngModel)]="frequenzaSelezionata" formControlName="frequenza" class="custom-select form-control">
+                  <option [ngValue]="0">... scegli la frequenza ...</option>
+                  <option *ngFor="let frequenza of elencoTipologieFrequenza" [ngValue]="frequenza.codice">
+                    {{frequenza.descrizione | uppercase}}
+                  </option>
+                </select>
+              </div>
+            </div>
+          </div>
+          <p></p>
+          <div *ngIf="showResult && !errorOnLoadData">
+            <strong>{{criterioCompilato}}</strong>
+            <div class="table-responsive">
+              <table (sorted)="onSorted($event)" class="table">
+                <thead>
+                  <tr>
+                    <th>Pos.</th>
+                    <th>Punti</th>
+                    <th class="col-isee">ISEE</th>
+                    <!-- th >N.ro domanda</th-->
+                    <th>Cognome e Nome minore</th>
+                    <th class="col-data-nascita">Data Nascita</th>
+                    <!-- th sortable-column="frequenza" sort-direction="init">Frequenza</th-->
+                    <th class="col-preferenza">Preferenza</th>
+                    <th>Altre preferenze</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr *ngFor="let tg of testataGraduatorie">
+                    <td>{{tg?.posizione}}</td>
+                    <td>{{tg?.punteggio}}</td>
+                    <td class="col-isee">{{tg?.isee}}</td>
+                    <!--td>{{tg.protocollo}}</td-->
+                    <td class="col-cognome-minore">{{tg?.cognomeMinore}} - {{tg?.nomeMinore}}</td>
+                    <td class="col-data-nascita">{{tg?.dataNascitaMinore}}</td>
+                    <!-- td>{{tg.tipologiaFrequenza}}</td-->
+                    <td class="col-preferenza">
+                      <div [ngStyle]="{'font-weight': visualizzaPreferenzaTestataBold(tg) ? 'bold' : 'normal' }">
+                        {{getDescrizionePreferenzaTestata(tg)}}
+                      </div>
+                    </td>
+                    <td>
+                      <div [ngStyle]="{'font-weight': visualizzaPreferenzaBold(tg, 1) ? 'bold' : 'normal' }" class="col-altre-preferenze" *ngIf="visualizzaPreferenza(tg, 1)">
+                        {{getDescrizionePreferenza(tg, 1)}}
+                      </div>
+                      <div [ngStyle]="{'font-weight': visualizzaPreferenzaBold(tg, 2) ? 'bold' : 'normal' }" class="col-altre-preferenze" *ngIf="visualizzaPreferenza(tg, 2)">
+                        {{getDescrizionePreferenza(tg, 2)}}
+                      </div>
+                      <div [ngStyle]="{'font-weight': visualizzaPreferenzaBold(tg, 3) ? 'bold' : 'normal' }" class="col-altre-preferenze" *ngIf="visualizzaPreferenza(tg, 3)">
+                        {{getDescrizionePreferenza(tg, 3)}}
+                      </div>
+                      <div [ngStyle]="{'font-weight': visualizzaPreferenzaBold(tg, 4) ? 'bold' : 'normal' }" class="col-altre-preferenze" *ngIf="visualizzaPreferenza(tg, 4)">
+                        {{getDescrizionePreferenza(tg, 4)}}
+                      </div>
+                      <div [ngStyle]="{'font-weight': visualizzaPreferenzaBold(tg, 5) ? 'bold' : 'normal' }" class="col-altre-preferenze" *ngIf="visualizzaPreferenza(tg, 5)">
+                        {{getDescrizionePreferenza(tg, 5)}}
+                      </div>
+                      <div [ngStyle]="{'font-weight': visualizzaPreferenzaBold(tg, 6) ? 'bold' : 'normal' }" class="col-altre-preferenze" *ngIf="visualizzaPreferenza(tg, 6)">
+                        {{getDescrizionePreferenza(tg, 6)}}
+                      </div>
+                      <div [ngStyle]="{'font-weight': visualizzaPreferenzaBold(tg, 7) ? 'bold' : 'normal' }" class="col-altre-preferenze" *ngIf="visualizzaPreferenza(tg, 7)">
+                        {{getDescrizionePreferenza(tg, 7)}}
+                      </div>
+                      <div [ngStyle]="{'font-weight': visualizzaPreferenzaBold(tg, 8) ? 'bold' : 'normal' }" class="col-altre-preferenze" *ngIf="visualizzaPreferenza(tg, 8)">
+                        {{getDescrizionePreferenza(tg, 8)}}
+                      </div>
+                      <div [ngStyle]="{'font-weight': visualizzaPreferenzaBold(tg, 9) ? 'bold' : 'normal' }" class="col-altre-preferenze" *ngIf="visualizzaPreferenza(tg, 9)">
+                        {{getDescrizionePreferenza(tg, 9)}}
+                      </div>
+                      <div [ngStyle]="{'font-weight': visualizzaPreferenzaBold(tg, 10) ? 'bold' : 'normal' }" class="col-altre-preferenze" *ngIf="visualizzaPreferenza(tg, 10)">
+                        {{getDescrizionePreferenza(tg, 10)}}
+                      </div>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+          <div *ngIf="showResult && page.totalElements > 0">
+            <p>{{page.totalElements}} posizioni trovate</p>
+          </div>
+          <div *ngIf="showResult && page.totalElements == 0">
+            <p>Nessuna posizione trovata</p>
+          </div>
+          <div *ngIf="errorOnLoadData">
+            <p></p>
+            <div class="alert alert-danger" role="alert">
+              <p>{{guiErrorMessage}}</p>
+            </div>
+          </div>
+          <div *ngIf="!graduatorieDisponibili" class="alert alert-info" role="alert">
+            Nessuna graduatoria disponibile per la consultazione.
+          </div>
+          <div class="btn-group row">
+            <div *ngIf="showResult" class="col-sm-12 col-md-12 col-lg-6">
+              <button type="button" class="btn btn-secondary" (click)="onReset()">Indietro</button>
+            </div>
+            <div *ngIf="!showResult" class="col-sm-12 col-md-12 col-lg-6">
+              <button type="button" class="btn btn-secondary" (click)="onClose()">Chiudi</button>
+            </div>
+            <div *ngIf="graduatorieDisponibili" class="col-sm-12 col-md-12 col-lg-6">
+              <button type="submit" class="btn btn-primary" [disabled]="disabledButtonRicerca" (click)="onSubmit()">
+                Ricerca
+              </button>
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>

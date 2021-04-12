@@ -1,0 +1,159 @@
+<div class="container">
+  <div class="row">
+    <div *ngIf="statusSearch" class="col">
+      <div class="loader"></div>
+    </div>
+    <div *ngIf="!statusSearch" class="col-lg-12 col-md-12 col-sm-12">
+      <h2>Reportistica DSE</h2>
+      <div class="elenco_accordion">
+        <div class="card">
+          <!-- ---------------------------------------------------------------------- -->
+          <!-- report residenze forzate                                               -->
+          <!-- ---------------------------------------------------------------------- -->
+          <div *ngIf="viewReportResidenzeForzate" class="box-report">
+            <div class="card-header" id="headingcollapse01-residenze-forzate">
+              <h3>
+                <button class="btn btn-link" data-toggle="collapse" data-target="#collapse01-residenze-forzate" aria-expanded="false" aria-controls="collapse01-residenze-forzate">
+                  Report residenze forzate
+                </button>
+              </h3>
+            </div>
+            <div id="collapse01-residenze-forzate" class="collapse in" aria-labelledby="headingcollapse01-residenze-forzate">
+              <div class="card-body">
+                <button type="button" class="btn btn-primary" (click)="dowloadReportResidenzeForzate()">
+                  <span class="fa fa-file">&nbsp;&nbsp;</span>Download
+                </button>
+              </div>
+            </div>
+          </div>
+          <!-- ---------------------------------------------------------------------- -->
+          <!-- report graduatoria completa                                            -->
+          <!-- ---------------------------------------------------------------------- -->
+          <div *ngIf="viewGraduatoriaCompleta" class="box-report">
+            <div class="card-header" id="headingcollapse01-graduatoria-completa">
+              <h3>
+                <button class="btn btn-link" data-toggle="collapse" data-target="#collapse01-graduatoria-completa" aria-expanded="false" aria-controls="collapse01-graduatoria-completa">
+                  Report graduatoria completa
+                </button>
+              </h3>
+            </div>
+            <div id="collapse01-graduatoria-completa" class="collapse in" aria-labelledby="headingcollapse01-graduatoria-completa">
+              <div class="card-body">
+                <button type="button" class="btn btn-primary" (click)="dowloadGraduatoriaCompleta()">
+                  <span class="fa fa-file">&nbsp;&nbsp;</span>Download
+                </button>
+              </div>
+            </div>
+          </div>
+          <!-- ---------------------------------------------------------------------- -->
+          <!-- Report elenco posti nelle scuole                                       -->
+          <!-- ---------------------------------------------------------------------- -->
+          <div *ngIf="viewElencoPosti" class="box-report">
+            <div class="card-header" id="headingcollapse01-elenco-posti">
+              <h3>
+                <button class="btn btn-link" data-toggle="collapse" data-target="#collapse01-elenco-posti" aria-expanded="false" aria-controls="collapse01-elenco-posti">
+                  Report elenco posti nelle scuole
+                </button>
+              </h3>
+            </div>
+            <div id="collapse01-elenco-posti" class="collapse in" aria-labelledby="headingcollapse01-elenco-posti">
+              <div class="card-body">
+                <button type="button" class="btn btn-primary" (click)="dowloadElencoPosti()">
+                  <span class="fa fa-file">&nbsp;&nbsp;</span>Download
+                </button>
+              </div>
+            </div>
+          </div>
+          <!-- ---------------------------------------------------------------------- -->
+          <!-- report graduatoria approvazione                                        -->
+          <!-- ---------------------------------------------------------------------- -->
+          <div *ngIf="viewGraduatoriaApprovazione" class="box-report">
+            <div class="card-header" id="headingcollapse01-graduatoria-approvazione">
+              <h3>
+                <button class="btn btn-link" data-toggle="collapse" data-target="#collapse01-graduatoria-approvazione" aria-expanded="false" aria-controls="collapse01-graduatoria-approvazione">
+                  Report graduatoria per approvazione dirigente
+                </button>
+              </h3>
+            </div>
+            <div id="collapse01-graduatoria-approvazione" class="collapse in" aria-labelledby="headingcollapse01-graduatoria-approvazione">
+              <div class="card-body">
+                <div *ngIf="!graduatoriaApprovazioneDisponibile" class="alert alert-info" role="alert">
+                  Nessuna graduatoria in stato provvisoria congelata o definitiva congelata.
+                </div>
+                <div *ngIf="graduatoriaApprovazioneDisponibile">
+                  <div>
+                    <p>
+                      Le graduatorie selezionabili al primo step sono esclusivamente quelle in stato <i>provvisoria</i> o <i>provvisoria congelata</i>.
+                      <br>
+                      Per gli step successivi &egrave; invece possibile selezionare solo le graduatorie in stato <i>definitiva</i> o <i>definitiva congelata</i>.
+                    </p>
+                  </div>
+                  <form [formGroup]="graduatoriaApprovazioneForm">
+                    <div class="form-step">
+                      <div class="form-row">
+                        <div class="form-group col-sm-4 col-md-4 col-lg-4">
+                          <label for="graduatoria" class="col-form-label">Graduatoria</label>
+                          <select id="graduatoria" [(ngModel)]="graduatoriaSelezionata" formControlName="graduatoria" class="custom-select form-control" (ngModelChange)="onSelectGraduatoria()">
+                            <option *ngFor="let graduatoria of elencoGraduatorie" [ngValue]="graduatoria">
+                              {{graduatoria.descrizione | uppercase}}
+                            </option>
+                          </select>
+                        </div>
+                        <div class="form-group offset-lg-1 offset-md-1 offset-sm-1 col-sm-1 col-md-1 col-lg-1">
+                          <label for="step" class="col-form-label">Step</label>
+                          <select id="step" [(ngModel)]="stepSelezionato" formControlName="step" class="custom-select form-control" (ngModelChange)="onSelectStep()">
+                            <option *ngFor="let step of elencoStepGraduatoria" [ngValue]="step">
+                              {{step.descrizione | uppercase}}
+                            </option>
+                          </select>
+                        </div>
+                        <div class="form-group offset-lg-1 offset-md-1 offset-sm-1 col-sm-4 col-md-4 col-lg-4">
+                          <label for="statoGraduatoria" class="col-form-label">Stato graduatoria</label>
+                          <select id="statoGraduatoria" [(ngModel)]="statoGraduatoriaSelezionato" formControlName="statoGraduatoria" class="custom-select form-control">
+                            <option *ngFor="let statoGraduatoria of elencoStatiGraduatoria" [ngValue]="statoGraduatoria">
+                              {{statoGraduatoria.descrizione | uppercase}}
+                            </option>
+                          </select>
+                        </div>
+                      </div>
+                    </div>
+                  </form>
+                  <button id="btn-graduatoria-approvazione" type="button" class="btn btn-primary" (click)="downloadGraduatoriaApprovazione()">
+                    <span class="fa fa-file">&nbsp;&nbsp;</span>Download
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+          <!-- ---------------------------------------------------------------------- -->
+          <!-- report Domande Scuola residenza                                        -->
+          <!-- ---------------------------------------------------------------------- -->
+          <div *ngIf="viewReportDomandeScuolaResidenza && isMaterna" class="box-report">
+            <div class="card-header" id="headingcollapse01-domande-scuola-residenza">
+              <h3>
+                <button class="btn btn-link" data-toggle="collapse" data-target="#collapse01-domande-scuola-residenza" aria-expanded="false" aria-controls="collapse01-domande-scuola-residenza">
+                  Report vicinanza scuola a residenza
+                </button>
+              </h3>
+            </div>
+            <div id="collapse01-domande-scuola-residenza" class="collapse in" aria-labelledby="headingcollapse01-domande-scuola-residenza">
+              <div class="card-body">
+                <button type="button" class="btn btn-primary" (click)="dowloadDomandeScuolaResidenza()">
+                  <span class="fa fa-file">&nbsp;&nbsp;</span>Download
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div *ngIf="errors" class="alert alert-danger">
+        <p>{{errorMessage}}</p>
+      </div>
+      <div class="btn-group row">
+        <div class="col-sm-12 col-md-12 col-lg-12">
+          <button type="button" class="btn btn-secondary" (click)="returnSearch()">Chiudi</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

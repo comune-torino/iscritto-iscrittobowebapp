@@ -1,0 +1,22 @@
+<div class="user-info-all-detail">
+  <div class="container">
+    <div *ngIf="globalError" class="alert alert-danger">
+      Attenzione: si è verificato un errore.
+    </div>
+    <div class="row">
+      <div *ngIf="elencoAttivita" class="col">
+        <h2>Domande d'iscrizione</h2>
+        <div class="list-link" *ngFor="let attivita of elencoAttivita">
+          <h3>{{attivita.descrizione}}</h3>
+
+          <a *ngIf="attivita.codice !== 'DOM_INS'" routerLink="{{attivita.link}}">
+            <span class="sr-only"> {{attivita.descrizione}}</span>
+          </a>
+          <a *ngIf="attivita.codice === 'DOM_INS'" (click)="jumpToURLContoTerzi()">
+            <span class="sr-only"> {{attivita.descrizione}}</span>
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

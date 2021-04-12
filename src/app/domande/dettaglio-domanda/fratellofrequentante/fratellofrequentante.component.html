@@ -1,0 +1,61 @@
+<div *ngIf="isFratelloFrequentante || isFratelloNidoContiguo" class="card">
+  <div class="card-header" id="headingcollapse-fratelloFrequentante">
+    <h3>
+      <button class="btn btn-link" data-toggle="collapse" data-target="#collapse-fratelloFrequentante" aria-expanded="false" aria-controls="collapse-fratelloFrequentante">
+        Fratello o sorella frequentante o iscrivendo/a
+      </button>
+    </h3>
+  </div>
+  <div id="collapse-fratelloFrequentante" class="collapse hide" aria-labelledby="headingcollapse-fratelloFrequentante">
+    <div class="card-body">
+      <div *ngIf="isFratelloFrequentante" class="row form-bacheca">
+        <div class="col-12 col-md-12">
+          <h4 *ngIf="isFratelloNidoContiguo">Fratello frequentante</h4>
+          <ul>
+            <li>
+              <strong>Tipologia: </strong>{{fratelloFrequentateMinoreTipologia}}
+            </li>
+            <li>
+              <strong>Codice fiscale:</strong>{{fratelloFrequentateMinoreAnagrafica.codiceFiscale}}
+            </li>
+            <li>
+              <strong>Cognome e Nome: </strong>{{fratelloFrequentateMinoreAnagrafica.cognome}}
+              {{fratelloFrequentateMinoreAnagrafica.nome}}
+            </li>
+            <li>
+              <strong>Data nascita: </strong>{{fratelloFrequentateMinoreAnagrafica.dataNascita}}
+            </li>
+            <li>
+              <strong>Sesso: </strong>{{fratelloFrequentateMinoreAnagrafica.sesso}}
+            </li>
+          </ul>
+        </div>
+      </div>
+      <div *ngIf="isFratelloNidoContiguo" class="row form-bacheca">
+        <div class="col-12 col-md-12">
+          <h4>Fratello frequentante nido contiguo</h4>
+          <ul>
+            <li>
+              <strong>Codice fiscale:&nbsp;</strong>{{datiFratelloNidoContiguo?.codiceFiscale}}
+            </li>
+            <li>
+              <strong>Nome:&nbsp;</strong>{{datiFratelloNidoContiguo?.nome}}
+            </li>
+            <li>
+              <strong>Cognome:&nbsp;</strong>{{datiFratelloNidoContiguo?.cognome}}
+            </li>
+            <li>
+              <strong>Data nascita:&nbsp;</strong>{{datiFratelloNidoContiguo?.dataNascita}}
+            </li>
+            <li>
+              <strong>Sesso:&nbsp;</strong>{{datiFratelloNidoContiguo?.sesso}}
+            </li>
+            <li>
+              <strong>Nido contiguo:&nbsp;</strong>{{datiNidoContiguo?.descrizione}} - {{datiNidoContiguo?.indirizzo}}
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

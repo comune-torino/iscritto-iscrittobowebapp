@@ -1,0 +1,32 @@
+<form [formGroup]="CriterioForm">
+  <div class="form-step">
+    <div class="form-row inline-radio-box" aria-placeholder="compila il criterio di ricerca">
+      <div class="form-group">
+        <div class="custom-control custom-radio custom-control-inline  mr-8">
+          <input class="custom-control-input" type="radio" formControlName="criterio" value="CF" checked
+                 (change)="onSelectionChange('CF')"
+                 id="CF">
+          <label class="custom-control-label font-weight-normal" for="CF">Codice fiscale del minore</label>
+        </div>
+        <div class="custom-control custom-radio custom-control-inline  mr-8">
+          <input class="custom-control-input" type="radio" formControlName="criterio" value="CC"
+                 (change)="onSelectionChange('CC')"
+                 id="CN">
+          <label class="custom-control-label font-weight-normal" for="CN">Cognome e nome del minore/richiedente</label>
+        </div>
+        <div class="custom-control custom-radio custom-control-inline  mr-8">
+          <input class="custom-control-input" type="radio" formControlName="criterio" value="PD"
+                 (change)="onSelectionChange('PD')"
+                 id="PD">
+          <label class="custom-control-label font-weight-normal" for="PD">Numero Domanda</label>
+        </div>
+        <div class="custom-control custom-radio custom-control-inline  mr-8">
+          <input class="custom-control-input" type="radio" formControlName="criterio" value="SS"
+                 (change)="onSelectionChange('SS')"
+                 id="SS">
+          <label class="custom-control-label font-weight-normal" for="SS">Stato Domanda e Scuola</label>
+        </div>
+      </div>
+    </div>
+  </div>
+</form>

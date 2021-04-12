@@ -1,0 +1,77 @@
+  <div *ngIf="anagraficaSoggetto">
+    <h4>Anagrafici</h4>
+    <ul>
+      <li>
+        <strong>Cognome e Nome: </strong>{{anagraficaSoggetto.cognome}} {{anagraficaSoggetto.nome}}
+      </li>
+      <li>
+        <strong>Codice fiscale: </strong>{{anagraficaSoggetto.codiceFiscale}}
+      </li>
+      <li>
+        <strong>Data nascita: </strong>{{anagraficaSoggetto.dataNascita}}
+      </li>
+      <li *ngIf="anagraficaSoggetto.oraMinutiNascita">
+        <strong>Ora nascita: </strong>{{anagraficaSoggetto.oraMinutiNascita}}
+      </li>
+      <li>
+        <strong>Sesso: </strong>{{anagraficaSoggetto.sesso}}
+      </li>
+      <li *ngIf="anagraficaSoggetto.descrizioneCittadinanza">
+        <strong>Cittadinanza: </strong>{{anagraficaSoggetto.descrizioneCittadinanza}}
+      </li>
+    </ul>
+  </div>
+
+  <div *ngIf="luogoNascitaSoggetto">
+    <h4>Nascita</h4>
+    <ul>
+      <li>
+        <strong>Stato: </strong>{{luogoNascitaSoggetto.descNazione}}
+      </li>
+      <li>
+        <strong>Regione: </strong>{{luogoNascitaSoggetto.descRegione}}
+      </li>
+      <li>
+        <strong>Provincia: </strong>{{luogoNascitaSoggetto.descProvincia}}
+      </li>
+      <li>
+        <strong>Comune: </strong>{{luogoNascitaSoggetto.descComune}}
+      </li>
+    </ul>
+  </div>
+
+  <div *ngIf="residenzaSoggetto">
+    <h4>Residenza</h4>
+    <ul>
+      <li>
+        <strong>Stato: </strong>{{residenzaSoggetto.descNazione}}
+      </li>
+      <li>
+        <strong>Regione: </strong>{{residenzaSoggetto.descRegione}}
+      </li>
+      <li>
+        <strong>Provincia: </strong>{{residenzaSoggetto.descProvincia}}
+      </li>
+      <li>
+        <strong>Comune: </strong>{{residenzaSoggetto.descComune}}
+      </li>
+      <li>
+        <strong>CAP: </strong>{{residenzaSoggetto.cap}}
+      </li>
+      <li>
+        <strong>Indirizzo: </strong>{{residenzaSoggetto.indirizzo}}
+      </li>
+    </ul>
+  </div>
+
+  <div *ngIf="showMinoreCinqueAnni">
+    <h4>Minore 5 anni</h4>
+    <ul>
+      <li>
+        <strong>Cambio scuola frequenza: </strong>{{descCambioScuolaFrequenza}}
+      </li>
+      <li>
+        <strong>{{descCinqueAnni}}</strong>
+      </li>
+    </ul>
+  </div>

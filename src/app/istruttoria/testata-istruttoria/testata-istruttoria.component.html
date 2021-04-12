@@ -1,0 +1,56 @@
+<table *ngIf="page.totalElements > 0" appSortableTableDirective (sorted)="onSorted($event)" class="table">
+  <thead>
+    <tr>
+      <th sortable-column="protocolloDomandaIscrizione" sort-direction="init">N.ro Domanda</th>
+      <th sortable-column="cognomeMinore" sort-direction="init">Cognome e Nome Minore</th>
+      <!--<th sortable-column="nomeMinore" sort-direction="asc">Nome Minore</th>-->
+      <th sortable-column="statoDomandaCodice" sort-direction="init">Stato domanda</th>
+      <th sortable-column="dataConsegna" sort-direction="init">Data invio</th>
+      <div *ngIf="isNido">
+        <th sortable-column="indirizzo" sort-direction="init">Nido Prima Scelta</th>
+      </div>
+      <div *ngIf="isMaterna">
+        <th sortable-column="indirizzo" sort-direction="init">Scuola Prima Scelta</th>
+      </div>
+      <th sortable-column="ricorrenza" sort-direction="init">Ricorrenza</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let testataDomanda of rows">
+      <td>{{testataDomanda.protocolloDomandaIscrizione}}</td>
+      <td>
+        <a *ngIf="preventiva" class="nav-link"
+          routerLink="/istruttoria/preventive/domanda/{{testataDomanda.idDomandaIscrizione}}/{{codiceCondizionePunteggio}}/codTipoIstruttoria/{{codTipoIstruttoria}}/{{testataDomanda.ricorrenza}}"
+          routerLinkActive="active">{{testataDomanda.cognomeMinore | uppercase}} {{testataDomanda.nomeMinore |
+          uppercase}}</a>
+        <a *ngIf="!preventiva" class="nav-link"
+          routerLink="/istruttoria/successive/domanda/{{testataDomanda.idDomandaIscrizione}}/{{codiceCondizionePunteggio}}/codTipoIstruttoria/{{codTipoIstruttoria}}/{{testataDomanda.ricorrenza}}"
+          routerLinkActive="active">{{testataDomanda.cognomeMinore | uppercase}} {{testataDomanda.nomeMinore |
+          uppercase}}</a>
+      </td>
+      <td>{{statoDomandaCodice(testataDomanda.statoDomandaCodice)}}</td>
+      <td>{{testataDomanda.dataConsegna}}</td>
+      <td>{{testataDomanda.indirizzo}}</td>
+      <td>{{testataDomanda.ricorrenza}}</td>
+    </tr>
+  </tbody>
+</table>
+<div class="row">
+  <div class="col-sm-6 col-md-6 col-lg-6">
+    <div *ngIf="page.totalElements > 0">
+      <p>{{page.totalElements}} Domande trovate</p>
+    </div>
+    <ngb-pagination *ngIf="page.totalElements > 0" (pageChange)="changePage($event)"
+      [collectionSize]="page.totalElements" [pageSize]="page.size" [maxSize]="5" [rotate]="true" [boundaryLinks]="true">
+    </ngb-pagination>
+  </div>
+  <div *ngIf="page.totalElements !== 0" class="offset-sm-4 offset-md-4 offset-lg-4 col-sm-2 col-md-2 col-lg-2">
+    <button class="btn" (click)="exportAsXLSX()">Export</button>
+  </div>
+</div>
+<div *ngIf="page.totalElements === 0">
+  <p></p>
+  <div class="alert alert-info fade show" role="alert">
+    <p>Nessuna domanda trovata.</p>
+  </div>
+</div>

@@ -1,0 +1,52 @@
+<div class="container">
+  <div class="row">
+    <div *ngIf="statusSearch" class="col">
+      <div class="loader"></div>
+    </div>
+    <div *ngIf="!statusSearch" class="col-lg-12 col-md-12 col-sm-12">
+      <h2>Gestione Anagrafica</h2>
+      <!-- ---------------------------------------------------------------------- -->
+      <!-- Gestione Anagrafica                                                         -->
+      <!-- ---------------------------------------------------------------------- -->
+      <div *ngIf="viewSeleziona">
+        <form [formGroup]="fgSelezionaScuolaAnno">
+          <div class="form-step">
+            <div class="form-row">
+              <div class="form-group col-lg-6 col-sm-6 col-md-6">
+                <label for="ordine" class="col-form-label">Ordine Scolastico</label>
+                <select id="oridine" formControlName="ordine" class="custom-select form-control" >
+                  <option [ngValue]="null">... Scegli ordine scolastico ...</option>
+                  <option [ngValue]="codice" *ngFor="let codice of ordineScolasticoList"  [attr.selected]="codice"> {{codice.codice}}-{{codice.descrizione}}</option>
+                  <!-- <option *ngFor="let codice of ordineScolasticoList" [ngValue]="codice">
+                    {{codice.codice}}-{{codice.descrizione}}
+                  </option> -->
+                </select> 
+                <label for="annoScolastico" class="col-form-label">Anno Scolastico</label>
+                <select id="annoScolastico" formControlName="annoScolastico" class="custom-select form-control">
+                  <option [ngValue]="null">... Scegli anno scolastico ...</option>
+                  <option *ngFor="let annoScolastico of annoScolasticoList" [ngValue]="annoScolastico.codice" [attr.selected]="annoScolastico.codice == annoDefault ? true : null">
+                    {{annoScolastico.codice}}
+                  </option>
+                </select>
+              </div>
+            </div>
+          </div>
+          <div class="btn-group row">
+            <div class="col-sm-6 col-md-6 col-lg-6">
+              <button type="button" class="btn btn-secondary" (click)="returnSearch()">Chiudi</button>
+            </div>
+            <div class="col-sm-6 col-md-6 col-lg-6 ">
+              <button type="button" class="btn btn-primary" (click)="onClickGraduatoria()">Graduatoria</button>           
+              <button type="button" class="btn btn-primary" (click)="onClickStep()">Step</button>
+              <button type="button" class="btn btn-primary" (click)="onClickEta()">Fasce Età</button>
+            </div>
+          </div>
+          <br>
+          <div *ngIf="loadingError" class="alert alert-danger">
+            Attenzione: si è verificato un errore durante il caricamento dei dati iniziali.
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>

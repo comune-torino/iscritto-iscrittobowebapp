@@ -1,0 +1,29 @@
+/* You can add global styles to this file, and also import other style files */
+
+/*@import url("/src/assets/css/bootstrap-grid.css");*/
+/*@import url("/src/assets/css/bootstrap-ie9.css");*/
+/*@import url("/src/assets/css/bootstrap-ie9.min.css");*/
+/*@import url("/src/assets/css/custom-list-step.css");*/
+/*@import url("/src/assets/css/custom.css");*/
+/*@import url("/src/assets/css/ie9.css");*/
+/*@import url("/src/assets/css/iscrizioni.css");*/
+/*@import url("/src/assets/css/offcanvas.css");*/
+/*@import url("/src/assets/css/print.css");*/
+/*@import url("/src/assets/css/responsive-table.css");*/
+
+
+app-print {
+    display: none;
+}
+
+
+@media print {   
+
+    .donotprint {
+        display: none;
+    }
+
+    app-print {
+        display: block;
+    }
+}

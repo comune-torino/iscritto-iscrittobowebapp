@@ -1,0 +1,433 @@
+<div class="user-info-all-detail">
+  <div class="container">
+    <div *ngIf="globalError" class="alert alert-danger">
+      Attenzione: si è verificato un errore.
+    </div>
+    <strong>{{criterioCompilato}}</strong>
+    <div class="row">
+      <div *ngIf="codTipoIstruttoria === 'BIN' || codTipoIstruttoria === 'BIN_A'" class="col-md-12 col-lg-12">
+        <div class="elenco_accordion">
+          <div class="card">
+            <div class="card-header" id="headingcollapse01-funzione-variazione">
+              <h3>
+                <button class="btn btn-link" data-toggle="collapse"
+                        data-target="#collapse01-funzione-variazione"
+                        aria-expanded="false"
+                        aria-controls="collapse01-funzione-variazione">
+                  Funzione Variazione
+                </button>
+              </h3>
+            </div>
+            <div id="collapse01-funzione-variazione" class="collapse show"
+                 aria-labelledby="headingcollapse01-funzione-variazione">
+              <div class="card-body">
+                <form *ngIf="loadStorico && maxFunzioneVariazione === 1"
+                      [formGroup]="radioFormFunzioneVariazione">
+                  <div class="row form-bacheca">
+                    <div class="col-sm-6 col-md-6 col-lg-6">
+                      <div class="form-step">
+                        <div class="form-row inline-radio-box" aria-placeholder="compila il criterio di ricerca">
+                          <div class="form-group">
+                            <div class="custom-control custom-radio custom-control-inline mr-8">
+                              <input [ngModel]="radioSelect" class="custom-control-input" type="radio"
+                                     formControlName="valida" value="VAL"
+                                     (change)="changeFunzioneVarieta('VAL')"
+                                     id="VAL">
+                              <label class="custom-control-label font-weight-normal" for="VAL">Valida</label>
+                            </div>
+                            <div class="custom-control custom-radio custom-control-inline mr-8">
+                              <input [ngModel]="radioSelect" class="custom-control-input" type="radio"
+                                     formControlName="rifiuta" value="RIF"
+                                     (change)="changeFunzioneVarieta('RIF')"
+                                     id="RIF">
+                              <label class="custom-control-label font-weight-normal" for="RIF">Rifiuta</label>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="offset-sm-3 offset-md-3 offset-lg-3 col-sm-3 col-md-3 col-lg-3">
+                      <button type="reset" class="btn btn-primary" [disabled]="disabledButtonConfirm"
+                              (click)="funzioneVariazione()">Conferma
+                      </button>
+                    </div>
+                  </div>
+                  <div *ngIf="radioSelect === 'RIF'" class="row form-bacheca">
+                    <div class="col-sm-9 col-md-9 col-lg-9">
+                      <div class="form-group">
+                        <label for="motivazione-soc-san">Motivazione</label>
+                        <textarea [ngModel]="motivazioneSelect" type="text" formControlName="motivazione"
+                                  class="form-control"
+                                  id="-soc-san" rows="7"></textarea>
+                      </div>
+                    </div>
+                  </div>
+                </form>
+                <form *ngIf="loadStorico && maxFunzioneVariazione > 1" [formGroup]="radioFormFunzioneVariazione">
+                  <div class="row form-bacheca">
+                    <div class="col-sm-12 col-md-12 col-lg-12">
+                      <div class="form-step">
+                        <div class="form-row">
+                          <div class="form-group col-sm-12 col-md-8 col-lg-8 editRowRicorrenza">
+                            <label for="QTYVAL" class="col-form-label">Valida &nbsp; &nbsp; </label>
+                            <input type="number" [ngModel]="actualFunzioneVariazione" formControlName="qtyval"
+                                   class="form-control inputEditRicorrenza"
+                                   id="QTYVAL"/>
+                            <label for="QTYVAL"> &nbsp; &nbsp; su {{maxFunzioneVariazione}} ricorrenze &nbsp;</label>
+                          </div>
+                          <div class="form-group offset-sm-1 offset-md-1 offset-lg-1 col-sm-3 col-md-3 col-lg-3">
+                            <div class="custom-control custom-radio custom-control-inline mr-8">
+                              <button type="reset" class="btn btn-primary" (click)="funzioneVariazione()"
+                                      [disabled]="disabledButtonConfirm">Conferma
+                              </button>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                      <div *ngIf="countVariazioneRicorrenza < maxFunzioneVariazione" class="form-step">
+                        <div class="form-row">
+                          <div class="col-sm-6 col-md-6 col-lg-6">
+                            <div class="form-group">
+                              <label for="motivazione">Motivazione</label>
+                              <textarea [ngModel]="motivazioneFunzioneVariazione" type="text"
+                                        formControlName="motivazione"
+                                        class="form-control" id="motivazione"
+                                        rows="7"></textarea>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                      <div *ngIf="errorConcorrenza" class="alert alert-danger">
+                        Attenzione: un altro utente ha effettuato delle modifiche. Lo storico delle modifiche &egrave; stato aggiornato.
+                      </div>
+                      <div *ngIf="validationError" class="alert alert-danger">
+                        {{validationMessage}}
+                      </div>
+                    </div>
+                  </div>
+                </form>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div *ngIf="codTipoIstruttoria === 'COM'" class="col-md-12 col-lg-12">
+        <div class="elenco_accordion">
+          <div class="card">
+            <div class="card-header" id="headingcollapse01-socio-sanitaria">
+              <h3>
+                <button class="btn btn-link" data-toggle="collapse"
+                        data-target="#collapse01-socio-sanitaria"
+                        aria-expanded="false"
+                        aria-controls="collapse01-socio-sanitaria">
+                  Funzione Socio Sanitaria
+                </button>
+              </h3>
+            </div>
+            <div id="collapse01-socio-sanitaria" class="collapse show"
+                 aria-labelledby="headingcollapse01-socio-sanitaria">
+              <div class="card-body">
+                <form [formGroup]="radioFormFunzioneVariazioneSocSan">
+                  <div class="row form-bacheca">
+                    <div class="col-sm-6 col-md-6 col-lg-6">
+                      <div class="form-step">
+                        <div class="form-row inline-radio-box" aria-placeholder="compila il criterio di ricerca">
+                          <div class="form-group">
+                            <div class="custom-control custom-radio custom-control-inline mr-8">
+                              <input [ngModel]="radioSelectedSocSan" class="custom-control-input" type="radio"
+                                     formControlName="valPunPrio" value="ACC-PUN-PRIO"
+                                     (change)="changeFunzioneVarietaSocSan('ACC-PUN-PRIO')"
+                                     id="ACC-PUN-PRIO">
+                              <label class="custom-control-label font-weight-normal" for="ACC-PUN-PRIO">ACCETTA CON
+                                PUNTEGGIO E PRIORITÀ</label>
+                            </div>
+                            <div class="custom-control custom-radio custom-control-inline mr-8">
+                              <input [ngModel]="radioSelectedSocSan" class="custom-control-input" type="radio"
+                                     formControlName="valPun" value="ACC-PUN"
+                                     (change)="changeFunzioneVarietaSocSan('ACC-PUN')"
+                                     id="ACC-PUN">
+                              <label class="custom-control-label font-weight-normal" for="ACC-PUN">ACCETTA CON SOLO
+                                PUNTEGGIO</label>
+                            </div>
+                            <div *ngIf="codiceCondizionePunteggio === 'PA_PRB_SAL'" class="custom-control custom-radio custom-control-inline mr-8">
+                              <input [ngModel]="radioSelectedSocSan" class="custom-control-input" type="radio"
+                                     formControlName="valPunRed" value="ACC-RED-CON"
+                                     (change)="changeFunzioneVarietaSocSan('ACC-RED-CON')"
+                                     id="ACC-RED-CON">
+                              <label class="custom-control-label font-weight-normal" for="ACC-RED-CON">ACCETTA - 
+                                REINDIRIZZAMENTO AD ALTRA COMMISSIONE</label>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="form-step">
+                        <div class="form-row inline-radio-box" aria-placeholder="compila il criterio di ricerca">
+                          <div class="form-group">
+                            <div class="custom-control custom-radio custom-control-inline mr-8">
+                              <input [ngModel]="radioSelectedSocSan" class="custom-control-input" type="radio"
+                                     formControlName="rifSocSan" value="RIF-SOCIO-SAN"
+                                     (change)="changeFunzioneVarietaSocSan('RIF-SOCIO-SAN')"
+                                     id="RIF-SOCIO-SAN">
+                              <label class="custom-control-label font-weight-normal" for="RIF-SOCIO-SAN">RIFIUTA</label>
+                            </div>
+                            <div class="custom-control custom-radio custom-control-inline mr-8">
+                              <input [ngModel]="radioSelectedSocSan" class="custom-control-input" type="radio"
+                                     formControlName="rifRedCon" value="RIF-RED-CON"
+                                     (change)="changeFunzioneVarietaSocSan('RIF-RED-CON')"
+                                     id="RIF-RED-CON">
+                              <label class="custom-control-label font-weight-normal" for="RIF-RED-CON">RIFIUTA –
+                                REINDIRIZZAMENTO AD ALTRA COMMISSIONE</label>
+                            </div>
+                            <div class="custom-control custom-radio custom-control-inline mr-8">
+                              <input [ngModel]="radioSelectedSocSan" class="custom-control-input" type="radio"
+                                     formControlName="rifRicInt" value="RIF-RIC-INTEGR"
+                                     (change)="changeFunzioneVarietaSocSan('RIF-RIC-INTEGR')"
+                                     id="RIF-RIC-INTEGR">
+                              <label class="custom-control-label font-weight-normal" for="RIF-RIC-INTEGR">RIFIUTA –
+                                RICHIESTA INTEGRAZIONE</label>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="offset-sm-3 offset-md-3 offset-lg-3 col-sm-3 col-md-3 col-lg-3">
+                      <button type="reset" class="btn btn-primary" (click)="funzioneSocioSanitaria()" [disabled]="disabledButtonConfirmSocSan">Conferma
+                      </button>
+                    </div>
+                  </div>
+                  <div
+                    *ngIf="radioSelectedSocSan === 'RIF-RIC-INTEGR' || radioSelectedSocSan === 'RIF-RED-CON' || radioSelectedSocSan === 'RIF-SOCIO-SAN' || radioSelectedSocSan === 'ACC-RED-CON'"
+                    class="row form-bacheca">
+                    <div class="col-sm-9 col-md-9 col-lg-9">
+                      <div class="form-group">
+                        <label for="motivazione-soc-san">Motivazione</label>
+                        <textarea [ngModel]="motivazioneSelectSocSan" type="text" formControlName="motivazioneSocSan"
+                                  class="form-control"
+                                  id="motivazione-soc-san" rows="7"></textarea>
+                      </div>
+                    </div>
+                  </div>
+                  <div *ngIf="errorConcorrenza" class="alert alert-danger">
+                    Attenzione: un altro utente ha effettuato delle modifiche. Lo storico delle modifiche &egrave; stato aggiornato.
+                  </div>
+                  <div *ngIf="validationError" class="alert alert-danger">
+                    {{validationMessage}}
+                  </div>
+                </form>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div *ngIf="codTipoIstruttoria === 'COM_A'" class="col-md-12 col-lg-12">
+        <div class="elenco_accordion">
+          <div class="card">
+            <div class="card-header" id="headingcollapse01-socio-sanitaria">
+              <h3>
+                <button class="btn btn-link" data-toggle="collapse"
+                        data-target="#collapse01-socio-sanitaria"
+                        aria-expanded="false"
+                        aria-controls="collapse01-socio-sanitaria">
+                  Funzione Socio Sanitaria
+                </button>
+              </h3>
+            </div>
+            <div id="collapse01-socio-sanitaria" class="collapse show"
+                 aria-labelledby="headingcollapse01-socio-sanitaria">
+              <div class="card-body">
+                <form [formGroup]="radioFormFunzioneVariazioneSocSan">
+                  <div class="row form-bacheca">
+                    <div class="col-sm-6 col-md-6 col-lg-6">
+                      <div class="form-step">
+                        <div class="form-row inline-radio-box" aria-placeholder="compila il criterio di ricerca">
+                          <div class="form-group">
+                            <div class="custom-control custom-radio custom-control-inline mr-8">
+                              <input [ngModel]="radioSelectedSocSan" class="custom-control-input" type="radio"
+                                     formControlName="valPunPrio" value="ACC-PUN-PRIO"
+                                     (change)="changeFunzioneVarietaSocSan('ACC-PUN-PRIO')"
+                                     id="ACC-PUN-PRIO">
+                              <label class="custom-control-label font-weight-normal" for="ACC-PUN-PRIO">ACCETTA CON
+                                PUNTEGGIO E PRIORITÀ</label>
+                            </div>
+                            <div class="custom-control custom-radio custom-control-inline mr-8">
+                              <input [ngModel]="radioSelectedSocSan" class="custom-control-input" type="radio"
+                                     formControlName="valPun" value="ACC-PUN"
+                                     (change)="changeFunzioneVarietaSocSan('ACC-PUN')"
+                                     id="ACC-PUN">
+                              <label class="custom-control-label font-weight-normal" for="ACC-PUN">ACCETTA CON SOLO
+                                PUNTEGGIO</label>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="form-step">
+                        <div class="form-row inline-radio-box" aria-placeholder="compila il criterio di ricerca">
+                          <div class="form-group">
+                            <div class="custom-control custom-radio custom-control-inline mr-8">
+                              <input [ngModel]="radioSelectedSocSan" class="custom-control-input" type="radio"
+                                     formControlName="rifSocSan" value="RIF-SOCIO-SAN"
+                                     (change)="changeFunzioneVarietaSocSan('RIF-SOCIO-SAN')"
+                                     id="RIF-SOCIO-SAN">
+                              <label class="custom-control-label font-weight-normal" for="RIF-SOCIO-SAN">RIFIUTA</label>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="offset-sm-3 offset-md-3 offset-lg-3 col-sm-3 col-md-3 col-lg-3">
+                      <button type="reset" class="btn btn-primary" (click)="funzioneSocioSanitaria()" [disabled]="disabledButtonConfirmSocSan">Conferma
+                      </button>
+                    </div>
+                  </div>
+                  <div
+                    *ngIf="radioSelectedSocSan === 'RIF-RIC-INTEGR' || radioSelectedSocSan === 'RIF-RED-CON' || radioSelectedSocSan === 'RIF-SOCIO-SAN' || radioSelectedSocSan === 'ACC-RED-CON'"
+                    class="row form-bacheca">
+                    <div class="col-sm-9 col-md-9 col-lg-9">
+                      <div class="form-group">
+                        <label for="motivazione-soc-san">Motivazione</label>
+                        <textarea [ngModel]="motivazioneSelectSocSan" type="text" formControlName="motivazioneSocSan"
+                                  class="form-control"
+                                  id="motivazione-soc-san" rows="7"></textarea>
+                      </div>
+                    </div>
+                  </div>
+                  <div *ngIf="errorConcorrenza" class="alert alert-danger">
+                    Attenzione: un altro utente ha effettuato delle modifiche. Lo storico delle modifiche &egrave; stato aggiornato.
+                  </div>
+                  <div *ngIf="validationError" class="alert alert-danger">
+                    {{validationMessage}}
+                  </div>
+                </form>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div *ngIf="codTipoIstruttoria === 'COM' || codTipoIstruttoria === 'COM_A' || codTipoIstruttoria === 'BIN_A'" class="col-md-12 col-lg-12">
+        <div class="elenco_accordion">
+          <div class="card">
+            <div class="card-header" id="headingcollapse01-certificati">
+              <h3>
+                <button class="btn btn-link" data-toggle="collapse"
+                        data-target="#collapse01-certificati"
+                        aria-expanded="false"
+                        aria-controls="collapse01-certificati">
+                  Mostra certificati
+                </button>
+              </h3>
+            </div>
+            <div id="collapse01-certificati" class="collapse show"
+                 aria-labelledby="headingcollapse01-certificati">
+              <div class="card-body">
+                <table class="table">
+                  <thead>
+                  <tr>
+                    <th>Protocollo</th>
+                    <th>Nome File</th>
+                    <th>Data Inserimento</th>
+                  </tr>
+                  </thead>
+                  <tbody>
+                  <tr *ngFor="let certificato of certificati">
+                    <td>{{certificato.protocollo}}</td>
+                    <td>{{certificato.nomeFile}}</td>
+                    <td>{{certificato.dataInserimento}}</td>
+                    <td>
+                      <button
+                        (click)="download(certificato.idAllegato, certificato.nomeFile, certificato.codiceFiscaleRichiedente)"
+                        class="btn btn-info fw-600 customButtonSfs m-r-1">
+                        <span class="fa fa-file"> </span> Download
+                      </button>
+                    </td>
+                  </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-md-12 col-lg-12">
+        <div class="elenco_accordion">
+          <div class="card">
+            <div class="card-header" id="headingcollapse01-storico-variazione">
+              <h3>
+                <button class="btn btn-link" data-toggle="collapse"
+                        data-target="#collapse01-storico-variazione"
+                        aria-expanded="false"
+                        aria-controls="collapse01-storico-variazione">
+                  Storico Variazione
+                </button>
+              </h3>
+            </div>
+            <div id="collapse01-storico-variazione" class="collapse show"
+                 aria-labelledby="headingcollapse01-storico-variazione">
+              <div class="card-body">
+                <table class="table">
+                  <thead>
+                  <tr>
+                    <th>Nome Operatore</th>
+                    <th>Cognome Operatore</th>
+                    <th>Validata</th>
+                    <th>Ricorrenza</th>
+                    <th>Note</th>
+                    <th>Data inizio validita</th>
+                    <th>Data fine validita</th>
+                  </tr>
+                  </thead>
+                  <tbody>
+                  <tr *ngFor="let variazione of storicoVariazione">
+                    <td>{{variazione.nomeOperatore}}</td>
+                    <td>{{variazione.cognomeOperatore}}</td>
+                    <td>{{decodificaStatoStoricoVariazione(variazione.validata)}}</td>
+                    <td>{{variazione.ricorrenza}}</td>
+                    <td>{{variazione.note}}</td>
+                    <td>{{variazione.dataInizioValidita}}</td>
+                    <td>{{variazione.dataFineValidita}}</td>
+                  </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-md-12 col-lg-12">
+        <div class="elenco_accordion">
+          <div class="card">
+            <div class="card-header" id="headingcollapse01-dettaglio-domanda">
+              <h3>
+                <button class="btn btn-link" data-toggle="collapse"
+                        data-target="#collapse01-dettaglio-domanda"
+                        aria-expanded="false"
+                        aria-controls="collapse01-dettaglio-domanda">
+                  Dettaglio Domanda
+                </button>
+              </h3>
+            </div>
+            <div id="collapse01-dettaglio-domanda" class="collapse show"
+                 aria-labelledby="headingcollapse01-dettaglio-domanda">
+              <div class="card-body">
+                <div class="row form-bacheca">
+                  <app-dettaglio-domanda
+                    [istruttoria]="true"
+                    [modificaPreferenze]="false"
+                  ></app-dettaglio-domanda>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-sm-12 col-md-12 col-lg-6">
+        <a class="btn btn-secondary" (click)="returnTestataIstruttoria()" role="button">indietro</a>
+      </div>
+    </div>
+  </div>
+</div>

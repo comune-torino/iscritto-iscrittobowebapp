@@ -1,0 +1,89 @@
+<script src="../testata-istruttoria/testata-istruttoria.component.ts"></script>
+<div class="container">
+  <div class="row">
+    <div *ngIf="statusSearch" class="col">
+      <div class="loader"></div>
+    </div>
+    <div *ngIf="!statusSearch" class="col-lg-12 col-md-12 col-sm-12">
+      <h2>Verifiche preventive</h2>
+      <form [formGroup]="FiltroVerifichePreventive" (submit)="onSubmit()">
+        <div class="form-step">
+          <div *ngIf="!showTestata" class="form-row">
+            <div class="form-group col-lg-6 col-sm-6 col-md-6">
+              <label for="Scuola" class="col-form-label">Seleziona una verifica *</label>
+              <select id="Scuola" [ngModel]="defaultTipoVerifica" formControlName="codiceCondizionePunteggio"
+                      class="custom-select form-control">
+                <option [ngValue]="null" selected="selected">... Scegli tipo verifica
+                  ...
+                </option>
+                <option *ngFor="let verifica of verifiche" [ngValue]="verifica.codice">{{verifica.descrizione |
+                  uppercase}}
+                </option>
+              </select>
+            </div>
+            <div class="form-group col-lg-6 col-sm-6 col-md-6">
+              <label for="statoDomanda" class="col-form-label">Stato condizione punteggio *</label>
+              <select id="statoDomanda" [ngModel]="defaultSelectStato" formControlName="statoCondizionePunteggio"
+                      class="custom-select form-control">
+                <option [ngValue]="null" selected="selected">... Scegli tipo stato ...</option>
+                <option [ngValue]="DAI">DA VALIDARE</option>
+                <option [ngValue]="ALL">[TUTTI]</option>
+                <option [ngValue]="CON">VALIDATA</option>
+                <option [ngValue]="INV">INVALIDATA</option>
+              </select>
+            </div>
+          </div>
+          <div *ngIf="!showTestata" class="form-row">
+            <div class="form-group col-lg-6 col-sm-6 col-md-6">
+              <label for="cognome" class="col-form-label">Cognome</label>
+              <input type="text" formControlName="cognomeMinore" class="form-control" id="cognome"
+                     placeholder="Inserisci il cognome"/>
+            </div>
+            <div class="form-group col-lg-6 col-sm-6 col-md-6">
+              <label for="nome" class="col-form-label">Nome</label>
+              <input type="text" formControlName="nomeMinore" class="form-control" id="nome"
+                     placeholder="Inserisci il nome"/>
+            </div>
+          </div>
+          <div *ngIf="!showTestata" class="form-row">
+            <div class="form-group col-lg-6 col-sm-6 col-md-6">
+              <label for="dataInizio" class="col-form-label">Dal *</label>
+              <input type="date" formControlName="dataInizio" class="form-control" id="dataInizio" min="1970-01-01" max="2099-12-31" />
+            </div>
+            <div class="form-group col-lg-6 col-sm-6 col-md-6">
+              <label for="dataFine" class="col-form-label">Al</label>
+              <input type="date" formControlName="dataFine" class="form-control" id="dataFine" min="1970-01-01" max="2099-12-31" />
+            </div>
+          </div>
+          <div *ngIf="showTestata">
+            <strong>{{criterioCompilato}}</strong>
+            <app-testata-istruttoria [codiceCondizionePunteggio]="codiceCondizionePunteggio"
+                                     [codTipoIstruttoria]="codTipoIstruttoriaSelected" [preventiva]="true"
+                                     [testataDomande]="testataDomande"></app-testata-istruttoria>
+          </div>
+          <div *ngIf="!showTestata" class="btn-group row">
+            <div class="col-sm-6 col-md-6 col-lg-6">
+              <button type="reset" class="btn btn-secondary" (click)="onReset()">Annulla</button>
+            </div>
+            <div class="col-sm-6 col-md-6 col-lg-6 ">
+              <button type="submit" class="btn btn-primary" [disabled]="disabledButtonSearch">
+                Cerca
+              </button>
+            </div>
+          </div>
+          <div *ngIf="showTestata" class="btn-group row">
+            <div class="col-sm-6 col-md-6 col-lg-6">
+              <button type="reset" class="btn btn-secondary" (click)="returnSearch()">Indietro</button>
+            </div>
+          </div>
+        </div>
+        <div *ngIf="errorOnRicerca" class="alert alert-danger">
+          Attenzione: si è verificato un errore nella ricerca, ripetere l'operazione.
+        </div>
+        <div *ngIf="errorLoadVerifiche" class="alert alert-danger">
+          Attenzione: si è verificato un errore nel reperimento delle verifiche.
+        </div>
+      </form>
+    </div>
+  </div>
+</div>

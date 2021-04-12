@@ -1,0 +1,145 @@
+<div class="container">
+  <div class="row">
+    <div *ngIf="statusSearch" class="col">
+      <div class="loader"></div>
+    </div>
+    <div [hidden]="statusSearch" class="col-lg-12 col-md-12 col-sm-12">
+      <!-- ---------------------------------------------------------------------- -->
+      <!-- ricerca domande                                                        -->
+      <!-- ---------------------------------------------------------------------- -->
+      <div [hidden]="!viewRicerca">
+        <div *ngIf="errors" class="alert alert-danger">
+          <p>{{errorMessage}}</p>
+        </div>
+        <strong>Scegli e compila un criterio di ricerca</strong>
+        <form [formGroup]="criterioForm">
+          <div class="form-step">
+            <div class="form-row inline-radio-box" aria-placeholder="compila il criterio di ricerca">
+              <div class="form-group">
+                <div class="custom-control custom-radio custom-control-inline  mr-8">
+                  <input class="custom-control-input" type="radio" formControlName="criterio" value="CF" checked (change)="onChangeTipoRicerca('CF')" id="CF">
+                  <label class="custom-control-label font-weight-normal" for="CF">Codice fiscale del minore</label>
+                </div>
+                <div class="custom-control custom-radio custom-control-inline  mr-8">
+                  <input class="custom-control-input" type="radio" formControlName="criterio" value="CC" (change)="onChangeTipoRicerca('CC')" id="CN">
+                  <label class="custom-control-label font-weight-normal" for="CN">Cognome e nome del minore/richiedente</label>
+                </div>
+                <div class="custom-control custom-radio custom-control-inline  mr-8">
+                  <input class="custom-control-input" type="radio" formControlName="criterio" value="PD" (change)="onChangeTipoRicerca('PD')" id="PD">
+                  <label class="custom-control-label font-weight-normal" for="PD">Numero Domanda</label>
+                </div>
+                <div class="custom-control custom-radio custom-control-inline  mr-8">
+                  <input class="custom-control-input" type="radio" formControlName="criterio" value="SS" (change)="onChangeTipoRicerca('SS')" id="SS">
+                  <label class="custom-control-label font-weight-normal" for="SS">Stato Domanda e Scuola</label>
+                </div>
+              </div>
+            </div>
+          </div>
+        </form>
+        <form [formGroup]="filtroRicercaForm">
+          <div class="form-step">
+            <div class="form-row" *ngIf="raggruppamentoSelezionato == 'CF'">
+              <div class="form-group col-lg-6 col-md-6 col-sm-6">
+                <label for="codiceFiscale" class="col-form-label">Codice fiscale *</label>
+                <input type="text" formControlName="codiceFiscaleMinore" class="form-control" id="codiceFiscale" placeholder="inserisci il codice fiscale" />
+              </div>
+            </div>
+            <div class="form-row" *ngIf="raggruppamentoSelezionato == 'CC'">
+              <div class="form-group col-lg-6 col-md-6 col-sm-6">
+                <label for="cognome" class="col-form-label">Cognome</label>
+                <input type="text" formControlName="cognomeMinore" class="form-control" id="cognome" placeholder="Inserisci il cognome" />
+              </div>
+              <div class="form-group col-lg-6 col-md-6 col-sm-6">
+                <label for="nome" class="col-form-label">Nome</label>
+                <input type="text" formControlName="nomeMinore" class="form-control" id="nome" placeholder="Inserisci il nome" />
+              </div>
+            </div>
+            <div class="form-row" *ngIf="raggruppamentoSelezionato == 'PD'">
+              <div class="form-group col-lg-6 col-md-6 col-sm-6">
+                <label for="protocolloDomanda" class="col-form-label">Numero Domanda *</label>
+                <input type="text" formControlName="protocolloDomanda" class="form-control" id="protocolloDomanda" placeholder="inserisci il numero domanda (NID-nnnnn-aaaa)" />
+              </div>
+            </div>
+            <div class="form-row" *ngIf="raggruppamentoSelezionato == 'SS'">
+              <div class="form-group col-lg-6 col-md-6 col-sm-6">
+                <label for="id-scuola" class="col-form-label">Scuola *</label>
+                <select id="id-scuola" formControlName="codiceScuola" class="custom-select form-control">
+                  <option [ngValue]="null" selected="selected">... Scegli la Scuola ...</option>
+                  <option [ngValue]="0">[TUTTE]</option>
+                  <option *ngFor="let scuola of scuole" [ngValue]="scuola.codice">{{scuola.descrizione | uppercase}}
+                  </option>
+                </select>
+              </div>
+              <div class="form-group col-lg-6 col-md-6 col-sm-6">
+                <label for="id-stato" class="col-form-label">Stato della domanda</label>
+                <select id="id-stato" formControlName="codiceStatoDomanda" class="custom-select form-control">
+                  <option [ngValue]="null" selected="selected">... Scegli lo stato ...</option>
+                  <option [ngValue]="0" selected="selected">[TUTTI]</option>
+                  <option *ngFor="let stato of statiDomanda" [ngValue]="stato.codice">{{stato.descrizione | uppercase}}
+                  </option>
+                </select>
+              </div>
+            </div>
+          </div>
+        </form>
+        <div class="btn-group row">
+          <div class="col-sm-6 col-md-6 col-lg-6">
+            <button type="button" class="btn btn-secondary" (click)="returnSearch()">Chiudi</button>
+          </div>
+          <div class="col-sm-6 col-md-6 col-lg-6 ">
+            <button type="submit" class="btn btn-primary" (click)="onSubmitRicerca()" [disabled]="disableRicerca">Cerca</button>
+          </div>
+        </div>
+      </div>
+      <!-- ---------------------------------------------------------------------- -->
+      <!-- elenco domande                                                         -->
+      <!-- ---------------------------------------------------------------------- -->
+      <div [hidden]="!viewElencoDomande">
+        <strong>{{criterioCompilato}}</strong>
+        <div *ngIf="errors" class="alert alert-danger">
+          <p>{{errorMessage}}</p>
+        </div>
+        <table *ngIf="page.totalElements > 0" appSortableTableDirective (sorted)="onSorted($event)" class="table">
+          <thead>
+            <tr>
+              <th sortable-column="protocolloDomandaIscrizione" sort-direction="init">N.ro Domanda</th>
+              <th sortable-column="cognomeMinore" sort-direction="init">Cognome e Nome minore</th>
+              <th sortable-column="codiceFiscaleMinore" sort-direction="init">Codice fiscale minore</th>
+              <th sortable-column="statoDomandaDescrizione" sort-direction="init">Stato Domanda</th>
+              <th sortable-column="dataUltimaModifica" sort-direction="init">Data ultima modifica</th>
+              <th>Utente ultima modifica</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let testataDomanda of rows">
+              <td hidden></td>
+              <td>{{testataDomanda.protocolloDomandaIscrizione}}</td>
+              <td>
+                <a class="nav-link" href="javascript:void(0);" (click)="onSelectDomanda(testataDomanda.protocolloDomandaIscrizione)">{{testataDomanda.cognomeMinore}} {{testataDomanda.nomeMinore}}</a>
+              </td>
+              <td>{{testataDomanda.codiceFiscaleMinore}}</td>
+              <td>{{testataDomanda.statoDomandaDescrizione}}</td>
+              <td>{{testataDomanda.dataUltimaModifica}}</td>
+              <td>{{testataDomanda.cognomeUtenteUltimaModifica}} {{testataDomanda.nomeUtenteUltimaModifica}}</td>
+            </tr>
+          </tbody>
+        </table>
+        <div *ngIf="page.totalElements > 0">
+          <p>{{page.totalElements}} Domande trovate</p>
+        </div>
+        <ngb-pagination *ngIf="page.totalElements > 0" (pageChange)="changePage($event)" [collectionSize]="page.totalElements" [maxSize]="5" [rotate]="true" [pageSize]="page.size" [boundaryLinks]="true"></ngb-pagination>
+        <div *ngIf="page.totalElements === 0">
+          <p></p>
+          <div class="alert alert-info fade show" role="alert">
+            <p>Nessuna domanda trovata.</p>
+          </div>
+        </div>
+        <div class="btn-group row">
+          <div class="col-sm-6 col-md-6 col-lg-6">
+            <button type="button" class="btn btn-secondary" (click)="showRicerca()">Indietro</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

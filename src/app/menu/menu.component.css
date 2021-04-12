@@ -1,0 +1,41 @@
+@media (min-width: 992px) {
+    .u-text-h1, h1 {
+      margin-bottom: 10px !important;
+    }
+}
+
+.ordine-scuola{
+  padding-left: 30px;
+}
+
+.nav-box-ordine-scuola {
+  box-shadow: none;
+}
+
+.nav-box-ordine-scuola .container {
+  margin-left: 0px;
+  padding-left: 0px;
+}
+
+.nav-item-label-ordine-scuola {
+  padding-left: 0px !important;
+}
+
+.nav-link-label-ordine-scuola {
+  border-radius: 0;
+  color: #000;
+  display: block;
+  white-space: nowrap;
+  font-weight: 700;
+  font-size: 2.3rem;
+  letter-spacing: 0.01em;
+  cursor: default;
+  padding-left: 5px;
+  line-height: 1.55;
+  margin: 0;
+  text-decoration: none;
+}
+
+.nav-link-ordine-scuola {
+  font-size: 2.3rem !important;
+}

@@ -1,0 +1,12 @@
+.editRowRicorrenza {
+  display: flex;
+}
+
+.inputEditRicorrenza {
+  width:20%
+}
+
+.customButtonSfs {
+  font-family: Montserrat, Helvetica, sans-serif;
+  font-weight: 600;
+}

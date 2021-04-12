@@ -1,0 +1,40 @@
+<table *ngIf="page.totalElements > 0" appSortableTableDirective (sorted)="onSorted($event)" class="table">
+  <thead>
+    <tr>
+      <th sortable-column="protocolloDomandaIscrizione" sort-direction="init">N.ro Domanda</th>
+      <th sortable-column="cognomeMinore" sort-direction="init">Cognome e Nome minore</th>
+      <th sortable-column="codiceFiscaleMinore" sort-direction="init">Codice fiscale minore</th>
+      <th sortable-column="statoDomandaDescrizione" sort-direction="init">Stato Domanda</th>
+      <th sortable-column="condizionePunteggioDescrizione" sort-direction="init">Condizione di punteggio</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let testataDomanda of testataDomande">
+      <td hidden></td>
+      <td>{{testataDomanda.protocollo}}</td>
+      <td>
+        <a class="nav-link" routerLink="domanda/{{testataDomanda.idDomandaIscrizione}}/preferenze"
+          routerLinkActive="active">{{testataDomanda.cognomeMinore}} {{testataDomanda.nomeMinore}}</a>
+      </td>
+      <td>{{testataDomanda.codiceFiscaleMinore}}</td>
+      <td>{{getDescrizioneStatoDomanda(testataDomanda)}}</td>
+      <td>{{getDescrizioneCondizionePunteggio(testataDomanda)}}</td>
+    </tr>
+  </tbody>
+</table>
+<div *ngIf="page.totalElements > 0">
+  <p>{{page.totalElements}} Domande trovate</p>
+</div>
+<ngb-pagination *ngIf="page.totalElements > 0" (pageChange)="changePage($event)"
+  [collectionSize]="page.totalElements"
+  [maxSize]="5"
+  [rotate]="true"
+  [pageSize]="page.size"
+  [boundaryLinks]="true">
+</ngb-pagination>
+<div *ngIf="page.totalElements === 0">
+  <p></p>
+  <div class="alert alert-info fade show" role="alert">
+    <p>Nessuna domanda trovata.</p>
+  </div>
+</div>

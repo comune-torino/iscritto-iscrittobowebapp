@@ -1,0 +1,16 @@
+<div class="-info-all-detail">
+  <div class="container">
+    <div *ngIf="globalError" class="alert alert-danger">
+      Attenzione: si è verificato un errore.
+    </div>
+    <div class="row">
+      <div *ngIf="statusSearch" class="col">
+        <div class="loader"></div>
+      </div>
+      <div *ngIf="!statusSearch" class="col">
+        <h2>Verifica Ammissibilit&agrave; preferenze</h2>
+        <app-testata-domande-ammissibilita [testataDomande]="testataDomande"></app-testata-domande-ammissibilita>
+      </div>
+    </div>
+  </div>
+</div>

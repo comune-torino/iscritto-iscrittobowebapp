@@ -1,0 +1,156 @@
+<div class="user-info-all-detail">
+  <div class="container">
+    <div *ngIf="errorLoadDomanda" class="alert alert-danger">
+      Attenzione: si è verificato un errore nel caricamento della domanda, ripetere l'operazione.
+    </div>
+    <div *ngIf="errorSalvaStatoNidi" class="alert alert-danger">
+      Attenzione: si è verificato un errore nel salvataggio delle preferenze, ripetere l'operazione.
+    </div>
+    <div *ngIf="statusSearchDomanda" class="row">
+      <div class="col">
+        <div class="loader"></div>
+      </div>
+    </div>
+    <div *ngIf="!statusSearchDomanda" class="user-info-all-detail">
+      <div *ngIf="domandaNido" class="container">
+        <div class="row">
+          <div class="col-md-12 col-lg-12">
+            <h4>
+              Domanda d'iscrizione di {{anagraficaMinore.cognome}} {{anagraficaMinore.nome}},
+              numero protocollo: {{domandaNido.protocolloDomandaIscrizione}}
+            </h4>
+          </div>
+        </div>
+        <div class="elenco_accordion">
+          <div *ngIf="certificatiDisabilita.length > 0" class="card">
+            <div class="card-header" id="headingcollapse01-certificati-dis">
+              <h3>
+                <button class="btn btn-link" data-toggle="collapse" data-target="#collapse01-certificati-dis"
+                  aria-expanded="false" aria-controls="collapse01-certificati-dis">
+                  Certificazioni di Disabilità
+                </button>
+              </h3>
+            </div>
+            <div id="collapse01-certificati-dis" class="collapse" aria-labelledby="headingcollapse01-certificati-dis">
+              <div class="card-body">
+                <table class="table">
+                  <thead>
+                    <tr>
+                      <th>Protocollo</th>
+                      <th>Nome File</th>
+                      <th>Data Inserimento</th>
+                      <th></th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr *ngFor="let certificatoDisabilita of certificatiDisabilita">
+                      <td>{{certificatoDisabilita.protocollo}}</td>
+                      <td>{{certificatoDisabilita.nomeFile}}</td>
+                      <td>{{certificatoDisabilita.dataInserimento}}</td>
+                      <td>
+                        <button
+                          (click)="download(certificatoDisabilita.idAllegato, certificatoDisabilita.nomeFile, certificatoDisabilita.codiceFiscaleRichiedente)"
+                          class="btn btn-info fw-600 customButtonSfs m-r-1">
+                          <span class="fa fa-file"> </span> Download
+                        </button>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+          <div *ngIf="certificatiProblemiSalute.length > 0" class="card">
+            <div class="card-header" id="headingcollapse01-certificati-sal">
+              <h3>
+                <button class="btn btn-link" data-toggle="collapse" data-target="#collapse01-certificati-sal"
+                  aria-expanded="false" aria-controls="collapse01-certificati-sal">
+                  Certificazioni di Salute
+                </button>
+              </h3>
+            </div>
+            <div id="collapse01-certificati-sal" class="collapse" aria-labelledby="headingcollapse01-certificati-sal">
+              <div class="card-body">
+                <table class="table">
+                  <thead>
+                    <tr>
+                      <th>Protocollo</th>
+                      <th>Nome File</th>
+                      <th>Data Inserimento</th>
+                      <th></th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr *ngFor="let certificatoProblemiSalute of certificatiProblemiSalute">
+                      <td>{{certificatoProblemiSalute.protocollo}}</td>
+                      <td>{{certificatoProblemiSalute.nomeFile}}</td>
+                      <td>{{certificatoProblemiSalute.dataInserimento}}</td>
+                      <td>
+                        <button
+                          (click)="download(certificatoProblemiSalute.idAllegato, certificatoProblemiSalute.nomeFile, certificatoProblemiSalute.codiceFiscaleRichiedente)"
+                          class="btn btn-info fw-600 customButtonSfs m-r-1">
+                          <span class="fa fa-file"> </span> Download
+                        </button>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+        <br>
+        <div class="row">
+          <div *ngIf="elencoNidi.length === 0" class="col-md-12 col-lg-12">
+            <p></p>
+            <div class="alert alert-info fade show" role="alert">
+              <p *ngIf="ordineScuola==='NID'">Nessun nido disponibile.</p>
+              <p *ngIf="ordineScuola==='MAT'">Nessuna scuola dell'infanzia disponibile.</p>
+            </div>
+          </div>
+          <div *ngIf="elencoNidi.length > 0" class="col-md-12 col-lg-12">
+            <h4 *ngIf="ordineScuola==='NID'">Elenco nidi di preferenza:</h4>
+            <h4 *ngIf="ordineScuola==='MAT'">Elenco scuole d'infanzia di preferenza:</h4>
+            <table class="table">
+              <thead>
+                <tr>
+                  <th>Scelta</th>
+                  <th *ngIf="ordineScuola==='NID'">Denominazione Nido</th>
+                  <th *ngIf="ordineScuola==='MAT'">Denominazione Scuola dell'infanzia</th>
+                  <th>Indirizzo</th>
+                  <th *ngIf="ordineScuola==='NID'">Tipologia di frequenza</th>
+                  <th>Punteggio</th>
+                  <th>Fuori termine</th>
+                  <th>Ammissibile</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let nido of elencoNidi">
+                  <td><strong>N° {{nido.posizione}}</strong></td>
+                  <td>{{nido.descrizione}}</td>
+                  <td>{{nido.indirizzo}}</td>
+                  <td *ngIf="ordineScuola==='NID'">{{getTipologiaFrequenzaScuola(nido)}}</td>
+                  <td>{{nido.punteggio}}</td>
+                  <td>{{getFuoriTermineText(nido.fuoriTermine)}}</td>
+                  <td><input type="checkbox" [(ngModel)]="nido.ammissibile"></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+        <div class="btn-group row">
+          <div class="col-sm-12 col-md-12 col-lg-6">
+            <button type="submit" class="btn btn-secondary" (click)="returnToElencoDomande()">
+              Indietro
+            </button>
+          </div>
+          <div *ngIf="elencoNidi.length > 0" class="col-sm-12 col-md-12 col-lg-6 btn-order-primary">
+            <button type="submit" class="btn btn-primary" (click)="salvaStatoNidi()">
+              Salva
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,827 @@
+<div class="user-info-all-detail">
+  <div class="container">
+    <div *ngIf="globalError" class="alert alert-danger">
+      Attenzione: si è verificato un errore.
+    </div>
+    <div *ngIf="statusSearchDomanda" class="row">
+      <div class="col">
+        <div class="loader"></div>
+      </div>
+    </div>
+    <div [hidden]="statusSearchDomanda" class="user-info-all-detail">
+      <div *ngIf="domandaNido" class="container">
+        <div class="row">
+          <div class="col-md-12 col-lg-12">
+            <h2>Domanda d'iscrizione di {{anagraficaMinore.cognome}}
+              {{anagraficaMinore.nome}}, numero protocollo {{domandaNido.protocolloDomandaIscrizione}}</h2>
+            <!--//areaTabAccodion - tab-pane-->
+            <div class="elenco_accordion">
+              <!-- Richiedente Begin -->
+              <div class="card">
+                <div class="card-header" id="headingcollapse01-preferenze">
+                  <h3>
+                    <button *ngIf="isSoggetto1Richiedente" class="btn btn-link" data-toggle="collapse"
+                      data-target="#collapse01-preferenze" aria-expanded="false" aria-controls="collapse01-preferenze">
+                      Dati Anagrafici Richiedente (Soggetto 1)
+                    </button>
+                    <button *ngIf="!isSoggetto1Richiedente" class="btn btn-link" data-toggle="collapse"
+                      data-target="#collapse01-preferenze" aria-expanded="false" aria-controls="collapse01-preferenze">
+                      Dati Anagrafici Richiedente
+                    </button>
+                  </h3>
+                </div>
+                <!--/card-header-->
+                <div id="collapse01-preferenze" class="collapse show" aria-labelledby="headingcollapse01-preferenze">
+                  <div class="card-body">
+                    <div class="row form-bacheca">
+                      <div *ngIf="richiedente" class="col-12 col-md-6">
+                        <app-dati-anagrafici [anagraficaSoggetto]="anagraficaRichiedente"
+                          [luogoNascitaSoggetto]="luogoNascitaRichiedente"
+                          [residenzaSoggetto]="luogoResidenzaRichiedente"></app-dati-anagrafici>
+                      </div>
+                      <!--//col-->
+                      <div *ngIf="richiedente" class="col-12 col-md-6">
+                        <h4>Contatti</h4>
+                        <!-- qui esplodo i dati di business -->
+                        <ul *ngIf="richiedente">
+                          <li>
+                            <strong>Email: </strong>{{richiedente.email}}
+                          </li>
+                          <li>
+                            <strong>Cellulare: </strong>{{richiedente.telefono}}
+                          </li>
+                          <li>
+                            <strong>Eventuale recapito diverso dalla residenza:
+                            </strong>{{richiedente.recapitoNoResidenza}}
+                          </li>
+                        </ul>
+                        <h4>Coabitazione e rapporto con Minore</h4>
+                        <ul>
+                          <li>
+                            <strong>Condizione di coabitazione: </strong>{{condizioneCoabitazioneText}}
+                          </li>
+                          <li>
+                            <strong>Coabita con Minore: </strong>{{residenzaConMinoreText}}
+                          </li>
+                          <li>
+                            <strong>Minore presente nel nucleo: </strong>{{presenzaNucleoMinoreText}}
+                          </li>
+                          <li>
+                            <strong>Relazione con Minore: </strong>{{relazioneConMinoreText}}
+                          </li>
+                        </ul>
+                        <div *ngIf="isSoggetto1Richiedente">
+                          <app-condizione-occupazionale [condizioneOccupazionale]="condizioneOccupazionaleSoggetto1">
+                          </app-condizione-occupazionale>
+                        </div>
+                        <!--//row-->
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <!-- Condizioni Salute RICHIEDENTE Begin-->
+              <div *ngIf="isSoggetto1Richiedente" class="card">
+                <div class="card-header" id="headingcollapse-saluteRichiedente">
+                  <h3>
+                    <button class="btn btn-link" data-toggle="collapse" data-target="#collapseSaluteRichiedente"
+                      aria-expanded="false" aria-controls="collapseSaluteMinore">
+                      Condizione di salute Richiedente (Soggetto 1)
+                    </button>
+                  </h3>
+                </div>
+                <!--/card-header-->
+                <div id="collapseSaluteRichiedente" class="collapse hide"
+                  aria-labelledby="headingcollapse-saluteRichiedente">
+                  <div class="card-body">
+                    <div class="row form-bacheca">
+                      <div *ngIf="richiedente" class="col-12 col-md-12">
+                        <app-condizione-socio-sanitaria [statoDomanda]="domandaNido.statoDomanda"
+                          [idSoggetto]="domandaNido.soggetto1.id"
+                          [idDomandaIscrizione]="domandaNido.idDomandaIscrizione"
+                          [richiedente]="domandaNido.richiedente" [minore]="domandaNido.minore" [isMinore]="false"
+                          [disabilita]="domandaNido.soggetto1.disabilita"
+                          [serviziSociali]="domandaNido.soggetto1.serviziSociali"
+                          [problemiSalute]="domandaNido.soggetto1.problemiSalute"
+                          [gravidanza]="domandaNido.soggetto1.gravidanza" [isSoggetto]="true"
+                          [anagraficaSoggetto]="domandaNido.soggetto1.anagrafica" [istruttoria]="istruttoria"
+                          [elencoNidi]="domandaNido.elencoNidi"></app-condizione-socio-sanitaria>
+                      </div>
+                      <!--//col-->
+                    </div>
+                    <!--//row-->
+                  </div>
+                </div>
+              </div>
+              <!-- Condizioni Salute RICHIEDENTE End-->
+              <!-- Richiedente End -->
+              <!-- Dati Anagrafici MINORE Begin-->
+              <div class="card">
+                <div class="card-header" id="headingcollapse-anagraficaMinore">
+                  <h3>
+                    <button class="btn btn-link" data-toggle="collapse" data-target="#collapseAnagraficaMinore"
+                      aria-expanded="false" aria-controls="collapseAnagraficaMinore">
+                      Dati Anagrafici del Minore
+                    </button>
+                  </h3>
+                </div>
+                <!--/card-header-->
+                <div id="collapseAnagraficaMinore" class="collapse show"
+                  aria-labelledby="headingcollapse-anagraficaMinore">
+                  <div class="card-body">
+
+                    <div class="row form-bacheca">
+                      <div *ngIf="minore" class="col-12 col-md-6">
+                        <app-dati-anagrafici [anagraficaSoggetto]="anagraficaMinore"
+                          [luogoNascitaSoggetto]="luogoNascitaMinore" [residenzaSoggetto]="luogoResidenzaMinore"
+                          [cinqueAnniNonFrequentante]="cinqueAnniNonFrequentante"
+                          [trasferimentoMinore]="trasferimentoMinore">
+                        </app-dati-anagrafici>
+                      </div>
+                      <!--//col-->
+                    </div>
+                    <!--//row-->
+                  </div>
+                </div>
+              </div>
+              <!-- Dati Anagrafici MINORE End-->
+              <!-- Lista Attesa Begin-->
+              <div *ngIf="isMaterna" class="card">
+                <div class="card-header" id="headingcollapse-listaAttesa">
+                  <h3>
+                    <button class="btn btn-link" data-toggle="collapse" data-target="#collapseListaAttesa"
+                      aria-expanded="false" aria-controls="collapseListaAttesa">
+                      Lista d'attesa
+                    </button>
+                  </h3>
+                </div>
+                <div id="collapseListaAttesa" class="collapse" aria-labelledby="headingcollapse-ListaAttesa">
+                  <div class="card-body">
+                    <div class="row form-bacheca">
+                      <div class="col-12 col-md-6">
+                        <app-lista-attesa [domandaNido]="domandaNido">
+                        </app-lista-attesa>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <!-- Lista Attesa End-->
+              <!-- Condizioni Salute MINORE Begin-->
+              <div class="card">
+                <div class="card-header" id="headingcollapse-saluteMinore">
+                  <h3>
+                    <button class="btn btn-link" data-toggle="collapse" data-target="#collapseSaluteMinore"
+                      aria-expanded="false" aria-controls="collapseSaluteMinore">
+                      Condizioni di priorit&agrave;
+                    </button>
+                  </h3>
+                </div>
+                <!--/card-header-->
+                <div id="collapseSaluteMinore" class="collapse hide" aria-labelledby="headingcollapse-saluteMinore">
+                  <div class="card-body">
+                    <div class="row form-bacheca">
+                      <div *ngIf="minore" class="col-12 col-md-12">
+                        <app-condizione-socio-sanitaria [statoDomanda]="domandaNido.statoDomanda"
+                          [idSoggetto]="domandaNido.minore.id" [idDomandaIscrizione]="domandaNido.idDomandaIscrizione"
+                          [richiedente]="domandaNido.richiedente" [minore]="domandaNido.minore" [isMinore]="true"
+                          [disabilita]="domandaNido.minore.disabilita"
+                          [serviziSociali]="domandaNido.minore.serviziSociali"
+                          [problemiSalute]="domandaNido.minore.problemiSalute" [isSoggetto]="false"
+                          [istruttoria]="istruttoria" [elencoNidi]="domandaNido.elencoNidi">
+                        </app-condizione-socio-sanitaria>
+                      </div>
+                      <!--//col-->
+                    </div>
+                    <!--//row-->
+                  </div>
+                </div>
+              </div>
+              <!--  Condizioni Salute MINORE End-->
+              <!-- Dati Anagrafici Soggetto 1 Begin -->
+              <div *ngIf="!isSoggetto1Richiedente" class="card">
+                <div class="card-header" id="headingcollapse-anagraficaSoggetto1">
+                  <h3>
+                    <button class="btn btn-link" data-toggle="collapse" data-target="#collapse-anagraficaSoggetto1"
+                      aria-expanded="false" aria-controls="collapse-anagraficaSoggetto1">
+                      Soggetto 1
+                    </button>
+                  </h3>
+                </div>
+                <!--/card-header-->
+                <div id="collapse-anagraficaSoggetto1" class="collapse hide"
+                  aria-labelledby="headingcollapse-anagraficaSoggetto1">
+                  <div class="card-body">
+                    <div class="row form-bacheca">
+                      <div *ngIf="minore" class="col-12 col-md-6">
+                        <app-dati-anagrafici [anagraficaSoggetto]="anagraficaSoggetto1"
+                          [luogoNascitaSoggetto]="luogoNascitaSoggetto1" [residenzaSoggetto]="luogoResidenzaSoggetto1">
+                        </app-dati-anagrafici>
+                      </div>
+                      <!--//col-->
+                    </div>
+                    <!--//row-->
+                  </div>
+                </div>
+              </div>
+              <!-- Dati Anagrafici Soggetto 1 End -->
+              <!-- Condizione Salute Soggetto 1 Begin -->
+              <div *ngIf="!isSoggetto1Richiedente" class="card">
+                <div class="card-header" id="headingcollapse-saluteSoggetto1">
+                  <h3>
+                    <button class="btn btn-link" data-toggle="collapse" data-target="#collapse-saluteSoggetto1"
+                      aria-expanded="false" aria-controls="collapse-saluteSoggetto1">
+                      Condizione di salute Soggetto 1
+                    </button>
+                  </h3>
+                </div>
+                <!--/card-header-->
+                <div id="collapse-saluteSoggetto1" class="collapse hide"
+                  aria-labelledby="headingcollapse-saluteSoggetto1">
+                  <div class="card-body">
+                    <div class="row form-bacheca">
+                      <div *ngIf="minore" class="col-12 col-md-6">
+                        <app-condizione-socio-sanitaria [statoDomanda]="domandaNido.statoDomanda"
+                          [idSoggetto]="domandaNido.soggetto1.id"
+                          [idDomandaIscrizione]="domandaNido.idDomandaIscrizione"
+                          [richiedente]="domandaNido.richiedente" [minore]="domandaNido.minore" [isMinore]="false"
+                          [disabilita]="domandaNido.soggetto1.disabilita"
+                          [serviziSociali]="domandaNido.soggetto1.serviziSociali"
+                          [problemiSalute]="domandaNido.soggetto1.problemiSalute"
+                          [gravidanza]="domandaNido.soggetto1.gravidanza" [isSoggetto]="true"
+                          [anagraficaSoggetto]="domandaNido.soggetto1.anagrafica" [istruttoria]="istruttoria"
+                          [elencoNidi]="domandaNido.elencoNidi"></app-condizione-socio-sanitaria>
+                      </div>
+                      <!--//col-->
+                    </div>
+                    <!--//row-->
+                  </div>
+                </div>
+              </div>
+              <!-- Condizione Salute Soggetto 1 End -->
+              <!-- Condizione Occupazionale Soggetto 1 Begin -->
+              <div *ngIf="!isSoggetto1Richiedente" class="card">
+                <div class="card-header" id="headingcollapse-cccupazionaleSoggetto1">
+                  <h3>
+                    <button class="btn btn-link" data-toggle="collapse" data-target="#collapse-cccupazionaleSoggetto1"
+                      aria-expanded="false" aria-controls="collapse-cccupazionaleSoggetto1">
+                      Condizione Occupazionale Soggetto 1
+                    </button>
+                  </h3>
+                </div>
+                <!--/card-header-->
+                <div id="collapse-cccupazionaleSoggetto1" class="collapse hide"
+                  aria-labelledby="headingcollapse-cccupazionaleSoggetto1">
+                  <div class="card-body">
+                    <div class="row form-bacheca">
+                      <app-condizione-occupazionale [condizioneOccupazionale]="condizioneOccupazionaleSoggetto1">
+                      </app-condizione-occupazionale>
+                      <!--//col-->
+                    </div>
+                    <!--//row-->
+                  </div>
+                </div>
+              </div>
+              <!-- Condizione Occupazionale Soggetto 1 End -->
+              <!-- Dati Anagrafici Soggetto 2 Begin -->
+              <div *ngIf="soggetto2" class="card">
+                <div class="card-header" id="headingcollapse-anagraficaSoggetto2">
+                  <h3>
+                    <button class="btn btn-link" data-toggle="collapse" data-target="#collapse-anagraficaSoggetto2"
+                      aria-expanded="false" aria-controls="collapse-anagraficaSoggetto2">
+                      Dati Anagrafici Soggetto 2
+                    </button>
+                  </h3>
+                </div>
+                <!--/card-header-->
+                <div id="collapse-anagraficaSoggetto2" class="collapse hide"
+                  aria-labelledby="headingcollapse-anagraficaSoggetto1">
+                  <div class="card-body">
+                    <div class="row form-bacheca">
+                      <div *ngIf="soggetto2" class="col-12 col-md-6">
+                        <ul>
+                          <li>
+                            <strong>Presenza nucleo: </strong>{{presenzaNucleoSoggetto2}}
+                          </li>
+                        </ul>
+                        <app-dati-anagrafici [anagraficaSoggetto]="anagraficaSoggetto2"
+                          [luogoNascitaSoggetto]="luogoNascitaSoggetto2" [residenzaSoggetto]="luogoResidenzaSoggetto2">
+                        </app-dati-anagrafici>
+                      </div>
+                      <!--//col-->
+                    </div>
+                    <!--//row-->
+                  </div>
+                </div>
+              </div>
+              <!-- Dati Anagrafici Soggetto 2 End -->
+              <!-- Condizione Salute Soggetto 2 Begin -->
+              <div *ngIf="soggetto2" class="card">
+                <div class="card-header" id="headingcollapse-saluteSoggetto2">
+                  <h3>
+                    <button class="btn btn-link" data-toggle="collapse" data-target="#collapse-saluteSoggetto2"
+                      aria-expanded="false" aria-controls="collapse-saluteSoggetto2">
+                      Condizione di salute Soggetto 2
+                    </button>
+                  </h3>
+                </div>
+                <!--/card-header-->
+                <div id="collapse-saluteSoggetto2" class="collapse hide"
+                  aria-labelledby="headingcollapse-saluteSoggetto2">
+                  <div class="card-body">
+                    <div class="row form-bacheca">
+                      <div *ngIf="soggetto2" class="col-12 col-md-6">
+                        <app-condizione-socio-sanitaria [statoDomanda]="domandaNido.statoDomanda"
+                          [idSoggetto]="domandaNido.soggetto2.id"
+                          [idDomandaIscrizione]="domandaNido.idDomandaIscrizione"
+                          [richiedente]="domandaNido.richiedente" [minore]="domandaNido.minore" [isMinore]="false"
+                          [disabilita]="domandaNido.soggetto2.disabilita"
+                          [serviziSociali]="domandaNido.soggetto2.serviziSociali"
+                          [problemiSalute]="domandaNido.soggetto2.problemiSalute"
+                          [gravidanza]="domandaNido.soggetto2.gravidanza" [isSoggetto]="true"
+                          [anagraficaSoggetto]="domandaNido.soggetto2.anagrafica" [istruttoria]="istruttoria"
+                          [elencoNidi]="domandaNido.elencoNidi"></app-condizione-socio-sanitaria>
+                      </div>
+                      <!--//col-->
+                    </div>
+                    <!--//row-->
+                  </div>
+                </div>
+              </div>
+              <!-- Condizione Salute Soggetto 2 End -->
+              <!-- Condizione Occupazionale Soggetto 2 Begin -->
+              <div *ngIf="soggetto2" class="card">
+                <div class="card-header" id="headingcollapse-cccupazionaleSoggetto2">
+                  <h3>
+                    <button class="btn btn-link" data-toggle="collapse" data-target="#collapse-cccupazionaleSoggetto2"
+                      aria-expanded="false" aria-controls="collapse-cccupazionaleSoggetto2">
+                      Condizione Occupazionale Soggetto 2
+                    </button>
+                  </h3>
+                </div>
+                <!--/card-header-->
+                <div id="collapse-cccupazionaleSoggetto2" class="collapse hide"
+                  aria-labelledby="headingcollapse-cccupazionaleSoggetto2">
+                  <div class="card-body">
+                    <div class="row form-bacheca">
+                      <app-condizione-occupazionale [condizioneOccupazionale]="condizioneOccupazionaleSoggetto2">
+                      </app-condizione-occupazionale>
+                      <!--//col-->
+                    </div>
+                    <!--//row-->
+                  </div>
+                </div>
+              </div>
+              <!-- Condizione Occupazionale Soggetto 2 End -->
+              <!-- Dati Anagrafici Soggetto 3 Begin -->
+              <div *ngIf="soggetto3" class="card">
+                <div class="card-header" id="headingcollapse-anagraficaSoggetto3">
+                  <h3>
+                    <button class="btn btn-link" data-toggle="collapse" data-target="#collapse-anagraficaSoggetto3"
+                      aria-expanded="false" aria-controls="collapse-anagraficaSoggetto3">
+                      Dati Anagrafici Soggetto 3
+                    </button>
+                  </h3>
+                </div>
+                <!--/card-header-->
+                <div id="collapse-anagraficaSoggetto3" class="collapse hide"
+                  aria-labelledby="headingcollapse-anagraficaSoggetto3">
+                  <div class="card-body">
+                    <div class="row form-bacheca">
+                      <div *ngIf="soggetto3 && soggetto3.stato === true" class="col-12 col-md-6">
+                        <app-dati-anagrafici [anagraficaSoggetto]="anagraficaSoggetto3"
+                          [luogoNascitaSoggetto]="luogoNascitaSoggetto3" [residenzaSoggetto]="luogoResidenzaSoggetto3">
+                        </app-dati-anagrafici>
+                      </div>
+                      <!--//col-->
+                    </div>
+                    <!--//row-->
+                  </div>
+                </div>
+              </div>
+              <!-- Dati Anagrafici Soggetto 3 End -->
+              <!-- Condizione Salute Soggetto 3 Begin -->
+              <div *ngIf="soggetto3" class="card">
+                <div class="card-header" id="headingcollapse-saluteSoggetto3">
+                  <h3>
+                    <button class="btn btn-link" data-toggle="collapse" data-target="#collapse-saluteSoggetto3"
+                      aria-expanded="false" aria-controls="collapse-saluteSoggetto3">
+                      Condizione di salute Soggetto 3
+                    </button>
+                  </h3>
+                </div>
+                <!--/card-header-->
+                <div id="collapse-saluteSoggetto3" class="collapse hide"
+                  aria-labelledby="headingcollapse-saluteSoggetto3">
+                  <div class="card-body">
+                    <div class="row form-bacheca">
+                      <div *ngIf="soggetto3" class="col-12 col-md-6">
+                        <app-condizione-socio-sanitaria [statoDomanda]="domandaNido.statoDomanda"
+                          [idSoggetto]="domandaNido.soggetto3.id"
+                          [idDomandaIscrizione]="domandaNido.idDomandaIscrizione"
+                          [richiedente]="domandaNido.richiedente" [minore]="domandaNido.minore" [isMinore]="false"
+                          [disabilita]="domandaNido.soggetto3.dati.disabilita"
+                          [serviziSociali]="domandaNido.soggetto3.dati.serviziSociali"
+                          [problemiSalute]="domandaNido.soggetto3.dati.problemiSalute"
+                          [gravidanza]="domandaNido.soggetto3.dati.gravidanza" [isSoggetto]="true"
+                          [anagraficaSoggetto]="domandaNido.soggetto3.dati.anagrafica" [istruttoria]="istruttoria"
+                          [elencoNidi]="domandaNido.elencoNidi"></app-condizione-socio-sanitaria>
+                      </div>
+                      <!--//col-->
+                    </div>
+                    <!--//row-->
+                  </div>
+                </div>
+              </div>
+              <!-- Condizione Salute Soggetto 2 End -->
+              <!-- Genitore solo (soggetto 1) Begin -->
+              <div *ngIf="genitoreSoloSoggetto1" class="card">
+                <div class="card-header" id="headingcollapse-genitoreSolo">
+                  <h3>
+                    <button class="btn btn-link" data-toggle="collapse" data-target="#collapse-genitoreSolo"
+                      aria-expanded="false" aria-controls="collapse-genitoreSolo">
+                      Dichiarazione Genitore Solo
+                    </button>
+                  </h3>
+                </div>
+                <!--/card-header-->
+                <div id="collapse-genitoreSolo" class="collapse hide" aria-labelledby="headingcollapse-genitoreSolo">
+                  <div class="card-body">
+                    <div class="row form-bacheca">
+                      <div class="col-12 col-md-6">
+                        <ul>
+                          <li>
+                            <strong>Stato: </strong>{{getDesGenitoreSolo(genitoreSoloSoggetto1.stato)}}
+                          </li>
+                          <li *ngIf="genitoreSoloSoggetto1Sentenza">
+                            <strong>Sentenza: </strong>
+                            <ul>
+                              <li *ngIf="genitoreSoloSoggetto1SentenzaNumero">Numero:
+                                {{genitoreSoloSoggetto1.sentenza.numero}}
+                              </li>
+                              <li *ngIf="genitoreSoloSoggetto1SentenzaTribunale">Tribunale:
+                                {{genitoreSoloSoggetto1.sentenza.tribunale}}
+                              </li>
+                              <li *ngIf="genitoreSoloSoggetto1SentenzaData">Data:
+                                {{genitoreSoloSoggetto1.sentenza.data}}
+                              </li>
+                            </ul>
+                          </li>
+                        </ul>
+                      </div>
+                      <!--//col-->
+                    </div>
+                    <!--//row-->
+                  </div>
+                </div>
+              </div>
+              <!-- Genitore solo (soggetto 1) End -->
+              <!-- Componenti nucleo Begin -->
+              <div *ngIf="componentiNucleo" class="card">
+                <div class="card-header" id="headingcollapse-componentiNucleo">
+                  <h3>
+                    <button class="btn btn-link" data-toggle="collapse" data-target="#collapse-componentiNucleo"
+                      aria-expanded="false" aria-controls="collapse-componentiNucleo">
+                      Altri Componenti Nucleo
+                    </button>
+                  </h3>
+                </div>
+                <!--/card-header-->
+                <div id="collapse-componentiNucleo" class="collapse hide"
+                  aria-labelledby="headingcollapse-componentiNucleo">
+                  <div class="card-body">
+                    <div class="row form-bacheca">
+                      <div class="col-12 col-md-6">
+                        <div *ngFor="let componente of componentiNucleo"><br>
+                          <strong>Relazione parentela: </strong>{{getRapportoParentelaConMinore(componente)}}
+                          <app-dati-anagrafici [anagraficaSoggetto]="componente.anagrafica"
+                            [luogoNascitaSoggetto]="componente.luogoNascita" [residenzaSoggetto]="">
+                          </app-dati-anagrafici>
+                          <h4>Condizioni di salute</h4>
+                          <app-condizione-socio-sanitaria [statoDomanda]="domandaNido.statoDomanda"
+                            [idSoggetto]="componente.id" [idDomandaIscrizione]="domandaNido.idDomandaIscrizione"
+                            [richiedente]="domandaNido.richiedente" [minore]="domandaNido.minore" [isMinore]="false"
+                            [disabilita]="componente.disabilita" [serviziSociali]="componente.serviziSociali"
+                            [problemiSalute]="componente.problemiSalute" [istruttoria]="istruttoria"
+                            [elencoNidi]="domandaNido.elencoNidi"></app-condizione-socio-sanitaria>
+                          <h4>------------------</h4>
+                        </div>
+                      </div>
+                      <!--//col-->
+                    </div>
+                    <!--//row-->
+                  </div>
+                </div>
+              </div>
+              <!-- Componenti nucleo End -->
+              <!-- Altri Componenti Begin -->
+              <div *ngIf="altriComponenti" class="card">
+                <div class="card-header" id="headingcollapse-altriComponenti">
+                  <h3>
+                    <button class="btn btn-link" data-toggle="collapse" data-target="#collapse-altriComponenti"
+                      aria-expanded="false" aria-controls="collapse-altriComponenti">
+                      Altri componenti del nucleo anagrafico del Minore
+                    </button>
+                  </h3>
+                </div>
+                <!--/card-header-->
+                <div id="collapse-altriComponenti" class="collapse hide"
+                  aria-labelledby="headingcollapse-altriComponenti">
+                  <div class="card-body">
+                    <div class="row form-bacheca">
+                      <div class="col-12 col-md-6">
+                        <div *ngFor="let componente of altriComponenti"><br>
+                          <strong>Relazione parentela: </strong>{{getRapportoParentelaConMinore(componente)}}
+                          <app-dati-anagrafici [anagraficaSoggetto]="componente.anagrafica"
+                            [luogoNascitaSoggetto]="componente.luogoNascita" [residenzaSoggetto]="">
+                          </app-dati-anagrafici>
+                          <h4>Condizioni di salute</h4>
+                          <app-condizione-socio-sanitaria [statoDomanda]="domandaNido.statoDomanda"
+                            [idSoggetto]="componente.id" [idDomandaIscrizione]="domandaNido.idDomandaIscrizione"
+                            [richiedente]="domandaNido.richiedente" [minore]="domandaNido.minore" [isMinore]="false"
+                            [disabilita]="componente.disabilita" [serviziSociali]="componente.serviziSociali"
+                            [problemiSalute]="componente.problemiSalute" [isSoggetto]="false"
+                            [istruttoria]="istruttoria" [elencoNidi]="domandaNido.elencoNidi">
+                          </app-condizione-socio-sanitaria>
+                          <h4>------------------</h4>
+                        </div>
+                      </div>
+                      <!--//col-->
+                    </div>
+                    <!--//row-->
+                  </div>
+                </div>
+              </div>
+              <!-- Componenti nucleo End -->
+              <!-- Minori affido Begin -->
+              <div *ngIf="minoriAffido" class="card">
+                <div class="card-header" id="headingcollapse-minoriAffido">
+                  <h3>
+                    <button class="btn btn-link" data-toggle="collapse" data-target="#collapse-minoriAffido"
+                      aria-expanded="false" aria-controls="collapse-altriComponenti">
+                      Minori in affido congiunto non presenti nel nucleo anagrafico del Minore
+                    </button>
+                  </h3>
+                </div>
+                <!--/card-header-->
+                <div id="collapse-minoriAffido" class="collapse hide" aria-labelledby="headingcollapse-minoriAffido">
+                  <div class="card-body">
+                    <div class="row form-bacheca">
+                      <div class="col-12 col-md-6">
+                        <div *ngFor="let componente of minoriAffido"><br>
+                          <strong>Relazione parentela: </strong>{{getRapportoParentelaConMinore(componente)}}
+                          <app-dati-anagrafici [anagraficaSoggetto]="componente.anagrafica"
+                            [luogoNascitaSoggetto]="componente.luogoNascita" [residenzaSoggetto]="">
+                          </app-dati-anagrafici>
+                          <h4>Condizioni di salute</h4>
+                          <app-condizione-socio-sanitaria [statoDomanda]="domandaNido.statoDomanda"
+                            [idSoggetto]="componente.id" [idDomandaIscrizione]="domandaNido.idDomandaIscrizione"
+                            [minore]="domandaNido.minore" [isMinore]="false" [richiedente]="domandaNido.richiedente"
+                            [disabilita]="componente.disabilita" [serviziSociali]="componente.serviziSociali"
+                            [problemiSalute]="componente.problemiSalute" [isSoggetto]="false"
+                            [istruttoria]="istruttoria" [elencoNidi]="domandaNido.elencoNidi">
+                          </app-condizione-socio-sanitaria>
+                          <h4>Sentenza </h4>
+                          <ul>
+                            <li>Numero: {{componente.sentenza.numero}}</li>
+                            <li>Tribunale: {{componente.sentenza.tribunale}}</li>
+                            <li>Data: {{componente.sentenza.data}}</li>
+                          </ul>
+                          <h4>------------------</h4>
+                        </div>
+                      </div>
+                      <!--//col-->
+                    </div>
+                    <!--//row-->
+                  </div>
+                </div>
+              </div>
+              <!-- Minori affido End -->
+              <!-- Dati Spostamento Begin -->
+              <div *ngIf="spostamentoMinore" class="card">
+                <div class="card-header" id="headingcollapse-spostamento">
+                  <h3>
+                    <div *ngIf="isMaterna">
+                      <button class="btn btn-link" data-toggle="collapse" data-target="#collapse-spostamento"
+                        aria-expanded="false" aria-controls="collapse-trasferimento">
+                        Spostamento residenza o cambiamento abitazione
+                      </button>
+                    </div>
+                    <div *ngIf="isNido">
+                      <button class="btn btn-link" data-toggle="collapse" data-target="#collapse-spostamento"
+                        aria-expanded="false" aria-controls="collapse-trasferimento">
+                        Spostamento residenza Torino
+                      </button>
+                    </div>
+                  </h3>
+                </div>
+                <div id="collapse-spostamento" class="collapse hide" aria-labelledby="headingcollapse-spostamento">
+                  <div class="card-body">
+                    <div class="row form-bacheca">
+                      <div class="col-12 col-md-6">
+                        <!--<h4>Trasferimento</h4>-->
+                        <div>
+                          <ul>
+                            <li>
+                              <strong>Tipologia: </strong>{{cambioResidenzaMinoreText}}
+                            </li>
+                            <li>
+                              <strong>Data variazione: </strong>{{spostamentoMinore.dati.dataVariazione}}
+                            </li>
+                            <li>
+                              <strong>Data appuntamento: </strong>{{spostamentoMinore.dati.dataAppuntamento}}
+                            </li>
+                            <li>
+                              <strong>Motivazione: </strong>{{spostamentoMinore.dati.residenzaFutura}}
+                            </li>
+                            <li *ngIf="isMaterna">
+                              <strong>Indirizzo: </strong>{{spostamentoMinore.dati.indirizzo}}
+                            </li>
+                          </ul>
+                        </div>
+                      </div>
+                      <!--//col-->
+                    </div>
+                    <!--//row-->
+                  </div>
+                </div>
+              </div>
+              <!-- Dati Spostamento Begin -->
+              <!-- Dati Trasferimento Begin -->
+              <div *ngIf="trasferimentoMinore" class="card">
+                <div class="card-header" id="headingcollapse-trasferimento">
+                  <h3>
+                    <button class="btn btn-link" data-toggle="collapse" data-target="#collapse-trasferimento"
+                      aria-expanded="false" aria-controls="collapse-trasferimento">
+                      Cambio della scuola di frequenza
+                    </button>
+                  </h3>
+                </div>
+                <!--/card-header-->
+                <div id="collapse-trasferimento" class="collapse hide" aria-labelledby="headingcollapse-trasferimento">
+                  <div class="card-body">
+                    <div class="row form-bacheca">
+                      <div class="col-12 col-md-6">
+                        <!--<h4>Trasferimento</h4>-->
+                        <ul>
+                          <li>
+                            <strong>Data cambio residenza: </strong>{{trasferimentoMinore.dati.data}}
+                          </li>
+                          <li>
+                            <strong>Vecchio indirizzo: </strong>{{trasferimentoMinore.dati.indirizzoVecchio}}
+                          </li>
+                          <li>
+                            <strong>Nuovo indirizzo: </strong>{{trasferimentoMinore.dati.indirizzoNuovo}}
+                          </li>
+                          <li *ngIf="isNido">
+                            <strong>Indirizzo nido di provenienza: </strong>{{trasferimentoMinore.dati.indirizzoNido}}
+                          </li>
+                          <li *ngIf="isMaterna">
+                            <strong>Indirizzo scuola di provenienza: </strong>{{trasferimentoMinore.dati.indirizzoNido}}
+                          </li>
+                          <li>
+                            <strong>Periodo di frequenza dal: </strong>{{trasferimentoMinore.dati.dataDal}}
+                          </li>
+                        </ul>
+                      </div>
+                      <!--//col-->
+                    </div>
+                    <!--//row-->
+                  </div>
+                </div>
+              </div>
+              <!-- Dati Trasferimento End -->
+              <!-- Valori ISEE Begin -->
+              <div *ngIf="isNido && isee" class="card">
+                <div class="card-header" id="headingcollapse-isee">
+                  <h3>
+                    <button class="btn btn-link" data-toggle="collapse" data-target="#collapse-isee"
+                      aria-expanded="false" aria-controls="collapse-isee">
+                      Valori ISEE
+                    </button>
+                  </h3>
+                </div>
+                <!--/card-header-->
+                <div id="collapse-isee" class="collapse hide" aria-labelledby="headingcollapse-isee">
+                  <div class="card-body">
+                    <div class="row form-bacheca">
+                      <div class="col-12 col-md-6">
+                        <h4>Indicatore ISEE: {{iseeStatoText}}</h4>
+                        <ul *ngIf="isee.stato">
+                          <li>
+                            <strong>Valore ISEE: </strong>{{datiIsee.valore}}
+                          </li>
+                          <li>
+                            <strong>Data scadenza attestazione: </strong>{{datiIsee.dataAttestazione}}
+                          </li>
+                        </ul>
+                      </div>
+                      <!--//col-->
+                    </div>
+                    <!--//row-->
+                  </div>
+                </div>
+              </div>
+              <!-- Valori ISEE End -->
+              <!-- Insegnamento religione cattolica Begin -->
+              <div *ngIf="isMaterna" class="card">
+                <div class="card-header" id="headingcollapse-irc">
+                  <h3>
+                    <button class="btn btn-link" data-toggle="collapse" data-target="#collapse-irc"
+                      aria-expanded="false" aria-controls="collapse-irc">
+                      Insegnamento Religione Cattolica
+                    </button>
+                  </h3>
+                </div>
+                <!--/card-header-->
+                <div id="collapse-irc" class="collapse hide" aria-labelledby="headingcollapse-irc">
+                  <div class="card-body">
+                    <div class="row form-bacheca">
+                      <div class="col-12 col-md-6">
+                        <h4>Scelta relativa all'insegnamento della religione cattolica: {{flIrcText}}</h4>
+                      </div>
+                      <!--//col-->
+                    </div>
+                    <!--//row-->
+                  </div>
+                </div>
+              </div>
+              <!-- Insegnamento religione cattolica End -->
+              <!-- Elenco nidi Begin -->
+              <app-elenco-nidi (onStatusSearchDomanda)="onStatusSearchDomanda($event)" [elencoNidi]="elencoNidi"
+                [modificaPreferenze]="modificaPreferenze"
+                [dataNascitaMinore]="domandaNido.minore.anagrafica.dataNascita"
+                [idDomanda]="domandaNido.idDomandaIscrizione" [codAnno]="domandaNido.annoScolastico"
+                [statoDomanda]="domandaNido.statoDomanda"></app-elenco-nidi>
+              <!-- Elenco nidi End -->
+              <!-- Fratelli o sorelle frequentanti Begin -->
+              <app-fratellofrequentante [fratelloFrequentante]="fratelloFrequentateMinore"
+                [fratelloNidoContiguo]="fratelloNidoContiguo"></app-fratellofrequentante>
+              <!-- Fratelli o sorelle frequentanti End -->
+              <!-- Elenco Condizione di punteggio Begin -->
+              <div *ngIf="condizioniPunteggio" class="card">
+                <div class="card-header" id="headingcollapse-condizionePunteggio">
+                  <h3>
+                    <button class="btn btn-link" data-toggle="collapse" data-target="#collapse-condizioniPunteggio"
+                      aria-expanded="false" aria-controls="collapse-elencoNidi">
+                      Condizioni di punteggio
+                    </button>
+                  </h3>
+                </div>
+                <!--/card-header-->
+                <div id="collapse-condizioniPunteggio" class="collapse hide"
+                  aria-labelledby="headingcollapse-elencoNidi">
+                  <div class="card-body">
+
+                    <div class="row form-bacheca">
+                      <div class="col-12 col-md-6">
+                        <div *ngFor="let condizione of condizioniPunteggio"><br>
+                          <ul>
+                            <li>
+                              <strong>Descrizione: </strong>{{condizione.descrizione}}
+                            </li>
+                            <li>
+                              <strong>Numero occorenze della condizione: </strong>{{ condizione.ricorrenza }}
+                            </li>
+                            <li>
+                              <strong>Tipologia di istruttoria: </strong>{{ getTipologiaIstruttoria(condizione) }}
+                            </li>
+                            <li>
+                              <strong>Operatore validatore: </strong>{{ condizione.cognomeUtente }}
+                            </li>
+                            <li>
+                              <strong>Data: </strong>{{ condizione.dataInizioValidita }}
+                            </li>
+                            <li *ngIf="condizione.validata">
+                              <div><strong>Condizione valida: </strong> {{condizioneValidita(condizione)}}</div>
+                            </li>
+                            <li>
+                              <strong>Note: </strong>{{ condizione.note }}
+                            </li>
+                          </ul>
+                          <h4>------------------</h4>
+                        </div>
+                      </div>
+                      <!--//col-->
+                    </div>
+                    <!--//row-->
+                  </div>
+                </div>
+              </div>
+              <!-- Elenco Condizione di punteggio End -->
+              <div *ngIf="!istruttoria" class="btn-group row">
+                <div class="col-sm-12 col-md-12 col-lg-6">
+                  <a class="btn btn-secondary" (click)="returnTestataDomanda()" role="button">indietro</a>
+                </div>
+              </div>
+            </div>
+            <!--chiudi elenco accordion -->
+          </div>
+          <!-- //col -->
+        </div>
+        <!--//row-->
+      </div>
+      <!-- container-->
+    </div>
+  </div>
+</div>

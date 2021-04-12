@@ -1,0 +1,88 @@
+<div *ngIf="hasCondizioneOccupazionale">
+  <h4>Condizione lavorativa</h4>
+  <strong>Tipologia Condizione: </strong>{{condizioneOccupazionaleText}}
+  <div *ngIf="dipendente"><strong>Dipendente</strong>
+    <ul>
+      <li>
+        <strong>Azienda: </strong>{{dipendente.azienda}}
+      </li>
+
+      <li>
+        <strong>Comune: </strong>{{dipendente.comune}}
+      </li>
+      <li>
+        <strong>Provincia: </strong>{{dipendente.provincia}}
+      </li>
+      <li>
+        <strong>Indirizzo: </strong>{{dipendente.indirizzo}}
+      </li>
+    </ul>
+  </div>
+  <div *ngIf="autonomo"><strong>Autonomo</strong>
+    <ul>
+      <li>
+        <strong>Partita iva: </strong>{{autonomo.piva}}
+      </li>
+
+      <li>
+        <strong>Comune: </strong>{{autonomo.comune}}
+      </li>
+      <li>
+        <strong>Provincia: </strong>{{autonomo.provincia}}
+      </li>
+      <li>
+        <strong>Indirizzo: </strong>{{autonomo.indirizzo}}
+      </li>
+    </ul>
+  </div>
+  <div *ngIf="disoccupato"><strong>Disoccupato</strong>
+    <ul>
+      <li>
+        <strong>Data della dichiarazione: </strong>{{disoccupato.dataDichiarazione}}
+      </li>
+      <li>
+        <strong>Dichiarazione del soggetto: </strong>{{disoccupato.soggettoDichiarazione}}
+      </li>
+      <li>
+        <strong >{{soggettoDichiarazione(disoccupato)}}</strong>
+        <ul *ngIf="disoccupato.soggettoDichiarazione === 'CI'">
+          <li>
+            <strong>Comune: </strong>{{disoccupato.datiCi.comune}}
+          </li>
+          <li>
+            <strong>Provincia: </strong>{{disoccupato.datiCi.provincia}}
+          </li>
+        </ul>
+      </li>
+    </ul>
+  </div>
+  <div *ngIf="periodiLavorativi"><strong>Periodi Lavorativi</strong>:
+    <ul>
+      <div *ngFor="let periodo of periodiLavorativi"><br>
+        -----------------------------------------------------
+        <li>
+          <strong>Azienda: </strong>{{periodo.azienda}}, {{periodo.indirizzo}} ( {{periodo.comune}} )
+        </li>
+        <li>
+          <strong>Periodo: </strong>{{periodo.dataInizio}} - {{periodo.dataFine}}
+        </li>
+      </div>
+    </ul>
+  </div>
+
+  <div *ngIf="studente"><strong>Studente</strong>
+    <ul>
+      <li>
+        <strong>Istituto: </strong>{{studente.istituto}}
+      </li>
+
+      <li>
+        <strong>Corso: </strong>{{studente.corso}}
+      </li>
+    </ul>
+  </div>
+</div>
+<div *ngIf="!hasCondizioneOccupazionale">
+  <h4>Condizione lavorativa</h4>
+  <strong>Tipologia Condizione: </strong>{{condizioneOccupazionaleText}}
+</div>

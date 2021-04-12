@@ -1,0 +1,9 @@
+<h4>Lista d'attesa:&nbsp;{{descListaAttesa}}</h4>
+<ul *ngIf="isListaAttesa">
+  <li>
+    <strong>Primo Anno:&nbsp;</strong>{{primoAnno?.annoScolastico}} - {{primoAnno?.scuola}}
+  </li>
+  <li>
+    <strong>Secondo Anno:&nbsp;</strong>{{secondoAnno?.annoScolastico}} - {{secondoAnno?.scuola}}
+  </li>
+</ul>
