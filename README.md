@@ -2,7 +2,7 @@
 ISCRITTO-ISCRITTOBOWEBAPP
 
 # Project Description
-Questa componente è un'applicazione di back-office sviluppata in Angular6 che realizza funzionalità di istruttoria, graduatoria ed accettazione domande di iscrizione nidi e materne
+Questa componente è un'applicazione di back-office sviluppata in Angular6 che realizza funzionalità di istruttoria, graduatoria ed accettazione domande di iscrizione nidi/scuole dell'infanzia
 
 # Configurations
 Aprire il file buildfiles/environment.dev-coto-01.ts e configurare i seguenti parametri:
